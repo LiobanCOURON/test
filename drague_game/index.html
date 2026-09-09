@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premiers Contacts - Chapitre 1</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        #game-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+        }
+
+        #header h1 {
+            font-size: 2em;
+            background: linear-gradient(90deg, #ff6b6b, #feca57);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        #header .warning {
+            font-size: 0.8em;
+            color: #ff6b6b;
+            margin-top: 10px;
+        }
+
+        #main-display {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 20px;
+        }
+
+        #scene-area {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 30px;
+            position: relative;
+            min-height: 500px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        #background-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 15px;
+            object-fit: cover;
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+        #dialogue-box {
+            position: relative;
+            z-index: 1;
+            background: rgba(0,0,0,0.7);
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 20px;
+            min-height: 200px;
+        }
+
+        #speaker-name {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #feca57;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        #dialogue-text {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #fff;
+        }
+
+        #character-sprite {
+            position: absolute;
+            right: 20px;
+            bottom: 20px;
+            max-height: 300px;
+            z-index: 2;
+            transition: all 0.3s ease;
+        }
+
+        #choices-area {
+            position: relative;
+            z-index: 3;
+            margin-top: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .choice-btn {
+            background: linear-gradient(135deg, rgba(255,107,107,0.2), rgba(254,202,87,0.2));
+            border: 2px solid rgba(254,202,87,0.5);
+            color: #fff;
+            padding: 15px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        .choice-btn:hover:not(:disabled) {
+            background: linear-gradient(135deg, rgba(255,107,107,0.4), rgba(254,202,87,0.4));
+            border-color: #feca57;
+            transform: translateX(10px);
+        }
+
+        .choice-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        #sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .panel {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .panel h3 {
+            color: #feca57;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .stat-row:last-child {
+            border-bottom: none;
+        }
+
+        .stat-label {
+            color: #aaa;
+        }
+
+        .stat-value {
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .heroine-section {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .heroine-name {
+            color: #ff6b6b;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar {
+            background: rgba(255,255,255,0.1);
+            border-radius: 5px;
+            height: 8px;
+            margin: 5px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+
+        .affection-fill { background: linear-gradient(90deg, #ff6b6b, #ff8e8e); }
+        .respect-fill { background: linear-gradient(90deg, #4ecdc4, #7eddd6); }
+        .tension-fill { background: linear-gradient(90deg, #feca57, #ffbe76); }
+
+        #history-log {
+            max-height: 200px;
+            overflow-y: auto;
+            font-size: 0.85em;
+            color: #aaa;
+        }
+
+        .log-entry {
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        #controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .control-btn {
+            flex: 1;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .control-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .typing-cursor::after {
+            content: '|';
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            #main-display {
+                grid-template-columns: 1fr;
+            }
+            
+            #sidebar {
+                order: -1;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <header id="header">
+            <h1>🌹 Premiers Contacts</h1>
+            <p class="warning">⚠️ Contenu 18+ - Romance et situations suggestives non graphiques</p>
+        </header>
+
+        <main id="main-display">
+            <section id="scene-area">
+                <img id="background-image" src="" alt="Background" style="display: none;">
+                
+                <div id="dialogue-box">
+                    <div id="speaker-name"></div>
+                    <div id="dialogue-text" class="typing-cursor"></div>
+                    
+                    <div id="choices-area"></div>
+                </div>
+
+                <img id="character-sprite" src="" alt="Character" style="display: none;">
+            </section>
+
+            <aside id="sidebar">
+                <div class="panel">
+                    <h3>📊 Statistiques</h3>
+                    <div class="stat-row">
+                        <span class="stat-label">Jour</span>
+                        <span class="stat-value" id="stat-day">1</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Moment</span>
+                        <span class="stat-value" id="stat-time">MATIN</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Réputation</span>
+                        <span class="stat-value" id="stat-reputation">0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Chaos</span>
+                        <span class="stat-value" id="stat-chaos">0</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Honnêteté</span>
+                        <span class="stat-value" id="stat-honnetete">0</span>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h3>💕 Héroïnes</h3>
+                    
+                    <div class="heroine-section">
+                        <div class="heroine-name">Léna Vernet</div>
+                        <div class="stat-row">
+                            <span class="stat-label">Affection</span>
+                            <span class="stat-value" id="lena-aff">0</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill affection-fill" id="lena-aff-bar" style="width: 0%"></div>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Respect</span>
+                            <span class="stat-value" id="lena-respect">0</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill respect-fill" id="lena-respect-bar" style="width: 0%"></div>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Tension</span>
+                            <span class="stat-value" id="lena-tension">0</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill tension-fill" id="lena-tension-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <div class="heroine-section">
+                        <div class="heroine-name">Maya Rivière</div>
+                        <div class="stat-row">
+                            <span class="stat-label">Affection</span>
+                            <span class="stat-value" id="maya-aff">0</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill affection-fill" id="maya-aff-bar" style="width: 0%"></div>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Confiance</span>
+                            <span class="stat-value" id="maya-confiance">0</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill respect-fill" id="maya-confiance-bar" style="width: 0%"></div>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Tension</span>
+                            <span class="stat-value" id="maya-tension">0</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill tension-fill" id="maya-tension-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <div class="heroine-section">
+                        <div class="heroine-name">Inès Delcourt</div>
+                        <div class="stat-row">
+                            <span class="stat-label">Affection</span>
+                            <span class="stat-value" id="ines-aff">0</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill affection-fill" id="ines-aff-bar" style="width: 0%"></div>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Sécurité</span>
+                            <span class="stat-value" id="ines-securite">0</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill respect-fill" id="ines-securite-bar" style="width: 0%"></div>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Tension</span>
+                            <span class="stat-value" id="ines-tension">0</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill tension-fill" id="ines-tension-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h3>📜 Journal</h3>
+                    <div id="history-log"></div>
+                </div>
+
+                <div id="controls">
+                    <button class="control-btn" onclick="game.saveGame()">💾 Sauvegarder</button>
+                    <button class="control-btn" onclick="game.loadGame()">📂 Charger</button>
+                    <button class="control-btn" onclick="game.resetGame()">🔄 Reset</button>
+                </div>
+            </aside>
+        </main>
+    </div>
+
+    <script>
+        class VisualNovelEngine {
+            constructor() {
+                this.state = {
+                    day: 1,
+                    time: 'MATIN',
+                    reputation: 0,
+                    chaos: 0,
+                    honnetete: 0,
+                    firstMeeting: null,
+                    flags: {},
+                    heroines: {
+                        LENA: { aff: 0, respect: 0, tension: 0 },
+                        MAYA: { aff: 0, confiance: 0, tension: 0 },
+                        INES: { aff: 0, securite: 0, tension: 0 }
+                    }
+                };
+                this.currentScene = null;
+                this.dialogueIndex = 0;
+                this.isTyping = false;
+                this.typingInterval = null;
+                this.scenario = null;
+                
+                this.init();
+            }
+
+            async init() {
+                try {
+                    const response = await fetch('data/scenario.json');
+                    this.scenario = await response.json();
+                    this.startGame();
+                } catch (error) {
+                    console.error('Erreur de chargement du scénario:', error);
+                    alert('Erreur: Impossible de charger le scénario.');
+                }
+            }
+
+            startGame() {
+                this.currentScene = this.scenario.scenes.OPENING;
+                this.dialogueIndex = 0;
+                this.renderScene();
+                this.updateUI();
+                this.logEntry('Nouvelle partie commencée');
+            }
+
+            renderScene() {
+                if (!this.currentScene) return;
+
+                const scene = this.currentScene;
+                const dialogues = scene.dialogues;
+                
+                if (this.dialogueIndex >= dialogues.length) {
+                    this.showChoices();
+                    return;
+                }
+
+                const dialogue = dialogues[this.dialogueIndex];
+                this.displayDialogue(dialogue);
+            }
+
+            displayDialogue(dialogue) {
+                const speakerEl = document.getElementById('speaker-name');
+                const textEl = document.getElementById('dialogue-text');
+                const spriteEl = document.getElementById('character-sprite');
+                const bgEl = document.getElementById('background-image');
+
+                // Set speaker
+                speakerEl.textContent = dialogue.speaker === 'narrator' ? '' : 
+                    dialogue.speaker === 'PLAYER' ? 'VOUS' : 
+                    this.getHeroineName(dialogue.speaker);
+                speakerEl.style.color = this.getSpeakerColor(dialogue.speaker);
+
+                // Set background
+                if (this.currentScene.background) {
+                    bgEl.src = this.createPlaceholderImage(this.currentScene.background, 'background');
+                    bgEl.style.display = 'block';
+                }
+
+                // Set sprite (placeholder)
+                if (dialogue.image && dialogue.speaker !== 'narrator') {
+                    spriteEl.src = this.createPlaceholderImage(dialogue.image, 'sprite');
+                    spriteEl.style.display = 'block';
+                } else {
+                    spriteEl.style.display = 'none';
+                }
+
+                // Typewriter effect
+                this.typeText(textEl, dialogue.text);
+            }
+
+            typeText(element, text) {
+                element.textContent = '';
+                this.isTyping = true;
+                let index = 0;
+
+                clearInterval(this.typingInterval);
+                this.typingInterval = setInterval(() => {
+                    if (index < text.length) {
+                        element.textContent += text[index];
+                        index++;
+                    } else {
+                        clearInterval(this.typingInterval);
+                        this.isTyping = false;
+                    }
+                }, 30);
+
+                // Click to skip
+                element.onclick = () => {
+                    if (this.isTyping) {
+                        clearInterval(this.typingInterval);
+                        element.textContent = text;
+                        this.isTyping = false;
+                    } else {
+                        this.nextDialogue();
+                    }
+                };
+            }
+
+            nextDialogue() {
+                if (this.isTyping) return;
+                
+                this.dialogueIndex++;
+                this.renderScene();
+            }
+
+            showChoices() {
+                const choicesArea = document.getElementById('choices-area');
+                choicesArea.innerHTML = '';
+
+                if (!this.currentScene.choices) return;
+
+                this.currentScene.choices.forEach(choice => {
+                    const btn = document.createElement('button');
+                    btn.className = 'choice-btn fade-in';
+                    btn.textContent = choice.text;
+                    
+                    // Check requirements
+                    if (choice.requirements && !this.checkRequirements(choice.requirements)) {
+                        btn.disabled = true;
+                        btn.title = 'Conditions non remplies';
+                    }
+
+                    btn.onclick = () => this.makeChoice(choice);
+                    choicesArea.appendChild(btn);
+                });
+            }
+
+            checkRequirements(requirements) {
+                for (const [key, value] of Object.entries(requirements)) {
+                    if (key.startsWith('player.')) {
+                        const trait = key.split('.')[1];
+                        if (this.state.player?.[trait] < value) return false;
+                    } else if (key.includes('.')) {
+                        const [heroine, stat] = key.split('.');
+                        if (this.state.heroines[heroine][stat.toLowerCase()] < value) return false;
+                    } else if (this.state[key] !== value) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            makeChoice(choice) {
+                // Apply effects
+                if (choice.effects) {
+                    this.applyEffects(choice.effects);
+                }
+
+                // Log choice
+                this.logEntry(`Choix: ${choice.text}`);
+
+                // Navigate to next scene
+                if (choice.nextScene) {
+                    this.currentScene = this.scenario.scenes[choice.nextScene];
+                    this.dialogueIndex = 0;
+                    
+                    // Update time if needed
+                    if (choice.endDay) {
+                        this.state.day++;
+                        this.state.time = 'MATIN';
+                    }
+                    
+                    this.renderScene();
+                    this.updateUI();
+                }
+            }
+
+            applyEffects(effects) {
+                for (const [key, value] of Object.entries(effects)) {
+                    if (key === 'flags') {
+                        Object.assign(this.state.flags, value);
+                    } else if (key.includes('.')) {
+                        const [heroine, stat] = key.split('.');
+                        const statKey = stat.toLowerCase();
+                        this.state.heroines[heroine][statKey] = 
+                            (this.state.heroines[heroine][statKey] || 0) + value;
+                    } else if (key in this.state) {
+                        this.state[key] = (this.state[key] || 0) + value;
+                    } else {
+                        this.state[key] = value;
+                    }
+                }
+            }
+
+            getHeroineName(code) {
+                const names = {
+                    'LENA': 'LÉNA',
+                    'MAYA': 'MAYA',
+                    'INES': 'INÈS',
+                    'PLAYER': 'VOUS'
+                };
+                return names[code] || code;
+            }
+
+            getSpeakerColor(speaker) {
+                const colors = {
+                    'narrator': '#aaa',
+                    'PLAYER': '#4ecdc4',
+                    'LENA': '#ff6b6b',
+                    'MAYA': '#feca57',
+                    'INES': '#a29bfe'
+                };
+                return colors[speaker] || '#fff';
+            }
+
+            updateUI() {
+                // Global stats
+                document.getElementById('stat-day').textContent = this.state.day;
+                document.getElementById('stat-time').textContent = this.state.time;
+                document.getElementById('stat-reputation').textContent = this.state.reputation;
+                document.getElementById('stat-chaos').textContent = this.state.chaos;
+                document.getElementById('stat-honnetete').textContent = this.state.honnetete;
+
+                // Heroines stats
+                this.updateHeroineUI('LENA', 'lena');
+                this.updateHeroineUI('MAYA', 'maya');
+                this.updateHeroineUI('INES', 'ines');
+            }
+
+            updateHeroineUI(heroineCode, prefix) {
+                const heroine = this.state.heroines[heroineCode];
+                const maxStat = 10;
+
+                // Affection
+                const affEl = document.getElementById(`${prefix}-aff`);
+                const affBar = document.getElementById(`${prefix}-aff-bar`);
+                if (affEl && heroine.aff !== undefined) {
+                    affEl.textContent = heroine.aff;
+                    affBar.style.width = `${Math.min(100, (heroine.aff / maxStat) * 100)}%`;
+                }
+
+                // Second stat (respect/confiance/securite)
+                const secondStat = heroine.respect !== undefined ? 'respect' :
+                                   heroine.confiance !== undefined ? 'confiance' : 'securite';
+                const secondEl = document.getElementById(`${prefix}-${secondStat}`);
+                const secondBar = document.getElementById(`${prefix}-${secondStat}-bar`);
+                if (secondEl && heroine[secondStat] !== undefined) {
+                    secondEl.textContent = heroine[secondStat];
+                    secondBar.style.width = `${Math.min(100, (heroine[secondStat] / maxStat) * 100)}%`;
+                }
+
+                // Tension
+                const tensionEl = document.getElementById(`${prefix}-tension`);
+                const tensionBar = document.getElementById(`${prefix}-tension-bar`);
+                if (tensionEl && heroine.tension !== undefined) {
+                    tensionEl.textContent = heroine.tension;
+                    tensionBar.style.width = `${Math.min(100, (heroine.tension / maxStat) * 100)}%`;
+                }
+            }
+
+            logEntry(message) {
+                const log = document.getElementById('history-log');
+                const entry = document.createElement('div');
+                entry.className = 'log-entry';
+                entry.textContent = `[J${this.state.day}] ${message}`;
+                log.insertBefore(entry, log.firstChild);
+            }
+
+            createPlaceholderImage(path, type) {
+                // Create a colored placeholder since we don't have actual images
+                const colors = {
+                    'background': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    'sprite': 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)'
+                };
+                
+                // For a real implementation, you would generate images using an AI API
+                // This is just a placeholder
+                return `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="400" height="600"><rect fill="${type === 'background' ? '#667eea' : '#f093fb'}" width="400" height="600"/><text x="200" y="300" text-anchor="middle" fill="white" font-size="20">${path.split('/').pop().replace('.png', '')}</text></svg>`)}`;
+            }
+
+            saveGame() {
+                localStorage.setItem('premierContactsSave', JSON.stringify({
+                    state: this.state,
+                    currentSceneId: this.currentScene?.id,
+                    dialogueIndex: this.dialogueIndex
+                }));
+                alert('Partie sauvegardée !');
+                this.logEntry('Partie sauvegardée');
+            }
+
+            loadGame() {
+                const saved = localStorage.getItem('premierContactsSave');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    this.state = data.state;
+                    this.currentScene = this.scenario.scenes[data.currentSceneId];
+                    this.dialogueIndex = data.dialogueIndex;
+                    this.renderScene();
+                    this.updateUI();
+                    this.logEntry('Partie chargée');
+                } else {
+                    alert('Aucune sauvegarde trouvée');
+                }
+            }
+
+            resetGame() {
+                if (confirm('Voulez-vous vraiment recommencer ?')) {
+                    this.startGame();
+                    this.logEntry('Partie réinitialisée');
+                }
+            }
+        }
+
+        // Initialize game
+        const game = new VisualNovelEngine();
+    </script>
+</body>
+</html>

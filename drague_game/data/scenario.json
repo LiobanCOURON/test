@@ -1,0 +1,1413 @@
+{
+  "game": {
+    "title": "Premiers Contacts - Chapitre 1",
+    "version": "1.0",
+    "contentWarning": "18+ - Romance, flirt, situations suggestives non graphiques"
+  },
+  "player": {
+    "name": "Player",
+    "traits": {
+      "CHARME": 0,
+      "ASSURANCE": 0,
+      "HUMOUR": 0,
+      "EMPATHIE": 0,
+      "AUDACE": 0,
+      "DISCRETION": 0
+    }
+  },
+  "variables": {
+    "DAY": 1,
+    "TIME": "MATIN",
+    "REPUTATION": 0,
+    "CHAOS": 0,
+    "HONNETETE": 0,
+    "SECRET_LENA": 0,
+    "SECRET_MAYA": 0,
+    "SECRET_INES": 0,
+    "RIVALITE": 0,
+    "TRIANGLE": 0,
+    "PROMESSE_1": null,
+    "RUMEUR_1": null,
+    "COEUR_CIBLE": "NONE"
+  },
+  "heroines": {
+    "LENA": {
+      "fullName": "Léna Vernet",
+      "age": 24,
+      "AFF": 0,
+      "RESPECT": 0,
+      "TENSION": 0,
+      "ROUTE_ACTIVE": false,
+      "flags": {}
+    },
+    "MAYA": {
+      "fullName": "Maya Rivière",
+      "age": 26,
+      "AFF": 0,
+      "CONFIANCE": 0,
+      "TENSION": 0,
+      "ROUTE_ACTIVE": false,
+      "flags": {}
+    },
+    "INES": {
+      "fullName": "Inès Delcourt",
+      "age": 25,
+      "AFF": 0,
+      "SECURITE": 0,
+      "TENSION": 0,
+      "ROUTE_ACTIVE": false,
+      "flags": {}
+    }
+  },
+  "scenes": {
+    "OPENING": {
+      "id": "OPENING",
+      "activation": "DAY==1 && TIME=='MATIN'",
+      "background": "assets/images/bg_neighborhood.png",
+      "music": "assets/audio/intro_theme.mp3",
+      "dialogues": [
+        {
+          "speaker": "narrator",
+          "text": "Vous arrivez dans ce quartier que vous ne connaissez pas encore. Les rues sont animées, les commerces accueillants. C'est un nouveau départ.",
+          "image": "assets/images/opening_01.png",
+          "expression": null
+        },
+        {
+          "speaker": "narrator",
+          "text": "Trois endroits attirent immédiatement votre attention. Où allez-vous vous arrêter en premier ?",
+          "image": "assets/images/opening_02.png",
+          "expression": null
+        }
+      ],
+      "choices": [
+        {
+          "text": "Le café-librairie \"Le Signet\"",
+          "nextScene": "LENA_MEET_01",
+          "effects": {
+            "firstMeeting": "LENA"
+          }
+        },
+        {
+          "text": "La place centrale et son marché",
+          "nextScene": "MAYA_MEET_01",
+          "effects": {
+            "firstMeeting": "MAYA"
+          }
+        },
+        {
+          "text": "Le petit studio photo au coin de la rue",
+          "nextScene": "INES_MEET_01",
+          "effects": {
+            "firstMeeting": "INES"
+          }
+        }
+      ]
+    },
+
+    "LENA_MEET_01": {
+      "id": "LENA_MEET_01",
+      "activation": "firstMeeting=='LENA'",
+      "background": "assets/images/bg_cafe_bookstore.png",
+      "music": "assets/audio/lena_theme.mp3",
+      "character": "LENA",
+      "dialogues": [
+        {
+          "speaker": "LENA",
+          "text": "Bonjour. Vous êtes nouveau dans le quartier, je suppose ? Je ne vous ai jamais vu ici.",
+          "image": "assets/images/lena_greeting_01.png",
+          "expression": "neutral"
+        },
+        {
+          "speaker": "LENA",
+          "text": "Je suis Léna. Je travaille ici au Signet. Samir, le propriétaire, m'a laissée seule quelques minutes et voilà qu'une livraison est introuvable...",
+          "image": "assets/images/lena_greeting_02.png",
+          "expression": "slightly_annoyed"
+        },
+        {
+          "speaker": "LENA",
+          "text": "Ça vous dirait de surveiller la caisse pendant que je cherche ? Ça ne prendra que deux minutes.",
+          "image": "assets/images/lena_request_01.png",
+          "expression": "hopeful"
+        }
+      ],
+      "choices": [
+        {
+          "text": "Accepter de surveiller la caisse",
+          "nextScene": "LENA_MEET_01_ACCEPT",
+          "effects": {
+            "LENA.RESPECT": 1,
+            "HONNETETE": 1
+          }
+        },
+        {
+          "text": "Proposer d'aider à chercher la livraison",
+          "nextScene": "LENA_MEET_01_HELP",
+          "effects": {
+            "LENA.AFF": 1,
+            "HONNETETE": 1
+          }
+        },
+        {
+          "text": "Faire une blague sur les livres égarés",
+          "nextScene": "LENA_MEET_01_JOKE",
+          "requirements": {
+            "player.HUMOUR": 1
+          },
+          "effects": {
+            "LENA.TENSION": 1,
+            "CHAOS": 1
+          }
+        }
+      ]
+    },
+
+    "LENA_MEET_01_ACCEPT": {
+      "id": "LENA_MEET_01_ACCEPT",
+      "background": "assets/images/bg_cafe_bookstore.png",
+      "character": "LENA",
+      "dialogues": [
+        {
+          "speaker": "LENA",
+          "text": "Merci. Je reviens tout de suite.",
+          "image": "assets/images/lena_smile_01.png",
+          "expression": "small_smile"
+        },
+        {
+          "speaker": "narrator",
+          "text": "Elle disparaît entre les rayons. Vous restez seul derrière le comptoir, observant les allées et venues du café.",
+          "image": "assets/images/lena_counter_view.png",
+          "expression": null
+        },
+        {
+          "speaker": "LENA",
+          "text": "Déjà là ! Merci d'avoir surveillé. C'est rare les gens de confiance ces jours-ci.",
+          "image": "assets/images/lena_grateful_01.png",
+          "expression": "warm_smile"
+        }
+      ],
+      "choices": [
+        {
+          "text": "Continuer vers la place du marché",
+          "nextScene": "MAYA_MEET_01"
+        },
+        {
+          "text": "Aller voir le studio photo",
+          "nextScene": "INES_MEET_01"
+        },
+        {
+          "text": "Explorer le quartier",
+          "nextScene": "DAY1_AFTERNOON"
+        }
+      ]
+    },
+
+    "LENA_MEET_01_HELP": {
+      "id": "LENA_MEET_01_HELP",
+      "background": "assets/images/bg_cafe_bookstore.png",
+      "character": "LENA",
+      "dialogues": [
+        {
+          "speaker": "LENA",
+          "text": "Vous voulez vraiment aider ? D'accord... Cherchons ensemble alors.",
+          "image": "assets/images/lena_surprised_01.png",
+          "expression": "surprised"
+        },
+        {
+          "speaker": "narrator",
+          "text": "Vous fouillez les rayons avec elle. Après quelques minutes, elle trouve la livraison coincée derrière une pile de catalogues.",
+          "image": "assets/images/lena_finding_01.png",
+          "expression": null
+        },
+        {
+          "speaker": "LENA",
+          "text": "Ah ! La voilà. Merci, vraiment. Je commençais à paniquer.",
+          "image": "assets/images/lena_relieved_01.png",
+          "expression": "relieved"
+        }
+      ],
+      "choices": [
+        {
+          "text": "Continuer vers la place du marché",
+          "nextScene": "MAYA_MEET_01"
+        },
+        {
+          "text": "Aller voir le studio photo",
+          "nextScene": "INES_MEET_01"
+        },
+        {
+          "text": "Explorer le quartier",
+          "nextScene": "DAY1_AFTERNOON"
+        }
+      ]
+    },
+
+    "LENA_MEET_01_JOKE": {
+      "id": "LENA_MEET_01_JOKE",
+      "background": "assets/images/bg_cafe_bookstore.png",
+      "character": "LENA",
+      "dialogues": [
+        {
+          "speaker": "PLAYER",
+          "text": "Peut-être que les livres ont décidé de faire une grève ? Ou ils se cachent pour lire tranquillement ?",
+          "image": "assets/images/player_joking_01.png",
+          "expression": "playful"
+        },
+        {
+          "speaker": "LENA",
+          "text": "...",
+          "image": "assets/images/lena_staring_01.png",
+          "expression": "deadpan"
+        },
+        {
+          "speaker": "LENA",
+          "text": "C'était censé être drôle ?",
+          "image": "assets/images/lena_smirking_01.png",
+          "expression": "amused_mockery"
+        },
+        {
+          "speaker": "LENA",
+          "text": "Bon, d'accord, c'était pas terrible. Mais au moins vous essayez. Je vais chercher cette livraison.",
+          "image": "assets/images/lena_walking_away_01.png",
+          "expression": "small_smile"
+        }
+      ],
+      "choices": [
+        {
+          "text": "Continuer vers la place du marché",
+          "nextScene": "MAYA_MEET_01"
+        },
+        {
+          "text": "Aller voir le studio photo",
+          "nextScene": "INES_MEET_01"
+        },
+        {
+          "text": "Explorer le quartier",
+          "nextScene": "DAY1_AFTERNOON"
+        }
+      ]
+    },
+
+    "MAYA_MEET_01": {
+      "id": "MAYA_MEET_01",
+      "activation": "true",
+      "background": "assets/images/bg_market_square.png",
+      "music": "assets/audio/maya_theme.mp3",
+      "character": "MAYA",
+      "dialogues": [
+        {
+          "speaker": "narrator",
+          "text": "La place du marché est animée. Les étals colorés s'alignent et les odeurs de produits frais emplissent l'air.",
+          "image": "assets/images/market_bustling_01.png",
+          "expression": null
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Attention ! Euh... pardon ! Je gère parfaitement la situation, ne vous inquiétez pas !",
+          "image": "assets/images/maya_struggling_01.png",
+          "expression": "flustered_but_happy"
+        },
+        {
+          "speaker": "narrator",
+          "text": "Une jeune femme tente de porter quatre sacs de courses en même temps, dont un qui semble dangereusement lourd.",
+          "image": "assets/images/maya_bags_01.png",
+          "expression": null
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Je m'appelle Maya. Et oui, je sais, j'ai peut-être un peu trop acheté. Mais c'est pour une soirée ce soir ! Vous êtes nouveau ici ?",
+          "image": "assets/images/maya_introducing_01.png",
+          "expression": "bright_smile"
+        }
+      ],
+      "choices": [
+        {
+          "text": "Lui proposer de l'aide avec ses sacs",
+          "nextScene": "MAYA_MEET_01_HELP",
+          "effects": {
+            "MAYA.AFF": 1,
+            "MAYA.CONFIANCE": 1
+          }
+        },
+        {
+          "text": "Se moquer gentiment de sa situation",
+          "nextScene": "MAYA_MEET_01_TEASE",
+          "effects": {
+            "MAYA.TENSION": 1,
+            "CHAOS": 1
+          }
+        },
+        {
+          "text": "Lui demander ce qu'il y a dans le sac lourd",
+          "nextScene": "MAYA_MEET_01_CURIOUS",
+          "effects": {
+            "MAYA.CONFIANCE": -1
+          }
+        }
+      ]
+    },
+
+    "MAYA_MEET_01_HELP": {
+      "id": "MAYA_MEET_01_HELP",
+      "background": "assets/images/bg_market_square.png",
+      "character": "MAYA",
+      "dialogues": [
+        {
+          "speaker": "PLAYER",
+          "text": "Laissez-moi vous aider avec ça.",
+          "image": "assets/images/player_helping_01.png",
+          "expression": "kind"
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Oh ! Vraiment ? Merci ! Je ne vais pas dire non, celui-là pèse une tonne !",
+          "image": "assets/images/maya_relieved_01.png",
+          "expression": "grateful_smile"
+        },
+        {
+          "speaker": "narrator",
+          "text": "Elle vous tend le sac le plus lourd. En le soulevant, vous comprenez pourquoi elle peinait.",
+          "image": "assets/images/maya_walking_together_01.png",
+          "expression": null
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Vous êtes adorable. Je vous dois un café ! Ou mieux, venez à la soirée ce soir si vous voulez !",
+          "image": "assets/images/maya_excited_01.png",
+          "expression": "enthusiastic"
+        }
+      ],
+      "choices": [
+        {
+          "text": "Aller voir le studio photo",
+          "nextScene": "INES_MEET_01"
+        },
+        {
+          "text": "Explorer le quartier",
+          "nextScene": "DAY1_AFTERNOON"
+        }
+      ]
+    },
+
+    "MAYA_MEET_01_TEASE": {
+      "id": "MAYA_MEET_01_TEASE",
+      "background": "assets/images/bg_market_square.png",
+      "character": "MAYA",
+      "dialogues": [
+        {
+          "speaker": "PLAYER",
+          "text": "On dirait que vous avez décidé de déménager tout le marché à vous toute seule !",
+          "image": "assets/images/player_teasing_01.png",
+          "expression": "teasing"
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Hé ! Je gère très bien, merci beaucoup ! ... Bon, d'accord, peut-être pas si bien que ça.",
+          "image": "assets/images/maya_defensive_01.png",
+          "expression": "mock_offended_then_laughing"
+        },
+        {
+          "speaker": "narrator",
+          "text": "Elle rit en ajustant ses sacs. Un musicien de rue commence soudainement à jouer une chanson entraînante.",
+          "image": "assets/images/maya_music_reaction_01.png",
+          "expression": null
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Oh j'adore cette chanson ! Vous dansez ?",
+          "image": "assets/images/maya_dance_invitation_01.png",
+          "expression": "playful_challenge"
+        }
+      ],
+      "choices": [
+        {
+          "text": "Accepter de danser un moment",
+          "nextScene": "MAYA_MEET_01_DANCE",
+          "effects": {
+            "MAYA.AFF": 1,
+            "AUDACE": 1
+          }
+        },
+        {
+          "text": "Décliner poliment",
+          "nextScene": "MAYA_MEET_01_NO_DANCE",
+          "effects": {
+            "MAYA.CONFIANCE": 1
+          }
+        }
+      ]
+    },
+
+    "MAYA_MEET_01_DANCE": {
+      "id": "MAYA_MEET_01_DANCE",
+      "background": "assets/images/bg_market_square.png",
+      "character": "MAYA",
+      "dialogues": [
+        {
+          "speaker": "narrator",
+          "text": "Vous acceptez de danser quelques instants. Maya rit aux éclats et vous entraîne dans des mouvements improvisés.",
+          "image": "assets/images/maya_dancing_01.png",
+          "expression": "pure_joy"
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Vous dansez plutôt bien ! Bon, d'accord, moi je triche, j'ai l'habitude. Mais c'était amusant !",
+          "image": "assets/images/maya_post_dance_01.png",
+          "expression": "breathless_happy"
+        }
+      ],
+      "choices": [
+        {
+          "text": "Aller voir le studio photo",
+          "nextScene": "INES_MEET_01"
+        },
+        {
+          "text": "Explorer le quartier",
+          "nextScene": "DAY1_AFTERNOON"
+        }
+      ]
+    },
+
+    "MAYA_MEET_01_NO_DANCE": {
+      "id": "MAYA_MEET_01_NO_DANCE",
+      "background": "assets/images/bg_market_square.png",
+      "character": "MAYA",
+      "dialogues": [
+        {
+          "speaker": "PLAYER",
+          "text": "Une autre fois peut-être, je dois y aller.",
+          "image": "assets/images/player_polite_01.png",
+          "expression": "apologetic"
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Pas de souci ! Je serai là ce soir si vous changez d'avis. La fête est sur la place !",
+          "image": "assets/images/maya_understanding_01.png",
+          "expression": "friendly_smile"
+        }
+      ],
+      "choices": [
+        {
+          "text": "Aller voir le studio photo",
+          "nextScene": "INES_MEET_01"
+        },
+        {
+          "text": "Explorer le quartier",
+          "nextScene": "DAY1_AFTERNOON"
+        }
+      ]
+    },
+
+    "MAYA_MEET_01_CURIOUS": {
+      "id": "MAYA_MEET_01_CURIOUS",
+      "background": "assets/images/bg_market_square.png",
+      "character": "MAYA",
+      "dialogues": [
+        {
+          "speaker": "PLAYER",
+          "text": "Il y a quoi dedans pour que ce soit si lourd ?",
+          "image": "assets/images/player_curious_01.png",
+          "expression": "curious"
+        },
+        {
+          "speaker": "narrator",
+          "text": "Avant qu'elle puisse répondre, un des sacs s'ouvre légèrement. Vous apercevez des câbles, des vinyles et un objet personnel enveloppé.",
+          "image": "assets/images/maya_bag_open_01.png",
+          "expression": null
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Euh... rien d'intéressant ! Juste du matériel pour la soirée. Merci quand même !",
+          "image": "assets/images/maya_protective_01.png",
+          "expression": "slightly_guarded"
+        },
+        {
+          "speaker": "narrator",
+          "text": "Elle referme rapidement le sac sans colère, mais vous sentez qu'elle apprécie moins votre curiosité.",
+          "image": "assets/images/maya_closing_bag_01.png",
+          "expression": null
+        }
+      ],
+      "choices": [
+        {
+          "text": "Aller voir le studio photo",
+          "nextScene": "INES_MEET_01"
+        },
+        {
+          "text": "Explorer le quartier",
+          "nextScene": "DAY1_AFTERNOON"
+        }
+      ]
+    },
+
+    "INES_MEET_01": {
+      "id": "INES_MEET_01",
+      "activation": "true",
+      "background": "assets/images/bg_photo_studio.png",
+      "music": "assets/audio/ines_theme.mp3",
+      "character": "INES",
+      "dialogues": [
+        {
+          "speaker": "narrator",
+          "text": "Un petit studio photo occupe le coin de la rue. Une jeune femme règle son appareil avec concentration.",
+          "image": "assets/images/ines_working_01.png",
+          "expression": null
+        },
+        {
+          "speaker": "INES",
+          "text": "Attendez. Ne bougez pas. Vous êtes dans mon cadre.",
+          "image": "assets/images/ines_focused_01.png",
+          "expression": "concentrated"
+        },
+        {
+          "speaker": "narrator",
+          "text": "Elle baisse son appareil et vous regarde directement.",
+          "image": "assets/images/ines_looking_01.png",
+          "expression": null
+        },
+        {
+          "speaker": "INES",
+          "text": "Je suis Inès. Je photographie le quartier depuis ce matin. Vous pouvez passer, mais évitez de traverser mon objectif s'il vous plaît.",
+          "image": "assets/images/ines_introducing_01.png",
+          "expression": "calm_direct"
+        }
+      ],
+      "choices": [
+        {
+          "text": "S'excuser immédiatement",
+          "nextScene": "INES_MEET_01_APOLOGIZE",
+          "effects": {
+            "INES.AFF": 1,
+            "INES.SECURITE": 1
+          }
+        },
+        {
+          "text": "Poser volontairement pour la photo",
+          "nextScene": "INES_MEET_01_POSE",
+          "effects": {
+            "INES.TENSION": 1,
+            "AUDACE": 1
+          }
+        },
+        {
+          "text": "Demander à voir le cliché",
+          "nextScene": "INES_MEET_01_SEE_PHOTO",
+          "effects": {
+            "flags": {"INES_PHOTO_1": true}
+          }
+        }
+      ]
+    },
+
+    "INES_MEET_01_APOLOGIZE": {
+      "id": "INES_MEET_01_APOLOGIZE",
+      "background": "assets/images/bg_photo_studio.png",
+      "character": "INES",
+      "dialogues": [
+        {
+          "speaker": "PLAYER",
+          "text": "Désolé, je ne vous avais pas vue. Je fais attention.",
+          "image": "assets/images/player_apologetic_01.png",
+          "expression": "sincere"
+        },
+        {
+          "speaker": "INES",
+          "text": "Ce n'est pas grave. La plupart des gens ne remarquent pas. Merci de faire attention.",
+          "image": "assets/images/ines_soft_smile_01.png",
+          "expression": "small_genuine_smile"
+        },
+        {
+          "speaker": "narrator",
+          "text": "Son expression se détend légèrement. Elle reprend son travail, mais vous jette un regard de temps en temps.",
+          "image": "assets/images/ines_back_to_work_01.png",
+          "expression": null
+        }
+      ],
+      "choices": [
+        {
+          "text": "Continuer l'exploration du quartier",
+          "nextScene": "DAY1_AFTERNOON"
+        }
+      ]
+    },
+
+    "INES_MEET_01_POSE": {
+      "id": "INES_MEET_01_POSE",
+      "background": "assets/images/bg_photo_studio.png",
+      "character": "INES",
+      "dialogues": [
+        {
+          "speaker": "narrator",
+          "text": "Au lieu de vous écarter, vous prenez une pose délibérée, un léger sourire aux lèvres.",
+          "image": "assets/images/player_posing_01.png",
+          "expression": "confident"
+        },
+        {
+          "speaker": "INES",
+          "text": "...",
+          "image": "assets/images/ines_surprised_01.png",
+          "expression": "taken_aback"
+        },
+        {
+          "speaker": "narrator",
+          "text": "Un clic. Elle a pris la photo malgré elle.",
+          "image": "assets/images/ines_click_01.png",
+          "expression": null
+        },
+        {
+          "speaker": "INES",
+          "text": "Vous auriez pu demander. Mais... le résultat n'est pas mal.",
+          "image": "assets/images/ines_reviewing_01.png",
+          "expression": "slightly_impressed"
+        }
+      ],
+      "choices": [
+        {
+          "text": "Continuer l'exploration du quartier",
+          "nextScene": "DAY1_AFTERNOON"
+        }
+      ]
+    },
+
+    "INES_MEET_01_SEE_PHOTO": {
+      "id": "INES_MEET_01_SEE_PHOTO",
+      "background": "assets/images/bg_photo_studio.png",
+      "character": "INES",
+      "dialogues": [
+        {
+          "speaker": "PLAYER",
+          "text": "Je peux voir ce que vous avez photographié ?",
+          "image": "assets/images/player_curious_photo_01.png",
+          "expression": "interested"
+        },
+        {
+          "speaker": "INES",
+          "text": "Hmm... D'accord. Regardez.",
+          "image": "assets/images/ines_showing_photo_01.png",
+          "expression": "hesitant_but_open"
+        },
+        {
+          "speaker": "narrator",
+          "text": "Elle vous montre l'écran de son appareil. C'est une photo du quartier, prise sous un angle que vous n'aviez jamais remarqué.",
+          "image": "assets/images/ines_photo_display_01.png",
+          "expression": null
+        },
+        {
+          "speaker": "INES",
+          "text": "Les gens passent devant sans voir. Mais il y a de la beauté ici, si on prend le temps.",
+          "image": "assets/images/ines_explaining_01.png",
+          "expression": "passionate"
+        }
+      ],
+      "choices": [
+        {
+          "text": "Continuer l'exploration du quartier",
+          "nextScene": "DAY1_AFTERNOON"
+        }
+      ]
+    },
+
+    "DAY1_AFTERNOON": {
+      "id": "DAY1_AFTERNOON",
+      "activation": "TIME=='MATIN'",
+      "background": "assets/images/bg_neighborhood_afternoon.png",
+      "dialogues": [
+        {
+          "speaker": "narrator",
+          "text": "L'après-midi s'installe sur le quartier. De nouvelles opportunités se présentent.",
+          "image": "assets/images/afternoon_transition_01.png",
+          "expression": null
+        },
+        {
+          "speaker": "narrator",
+          "text": "Que voulez-vous faire maintenant ?",
+          "image": "assets/images/afternoon_choices_01.png",
+          "expression": null
+        }
+      ],
+      "choices": [
+        {
+          "text": "Retourner au Signet (si rencontré)",
+          "nextScene": "LENA_01",
+          "requirements": {
+            "firstMeeting": "LENA"
+          }
+        },
+        {
+          "text": "Retrouver Maya pour la soirée",
+          "nextScene": "MAYA_02",
+          "requirements": {
+            "firstMeeting": "MAYA"
+          }
+        },
+        {
+          "text": "Retourner au studio photo",
+          "nextScene": "INES_02",
+          "requirements": {
+            "firstMeeting": "INES"
+          }
+        },
+        {
+          "text": "Explorer d'autres endroits",
+          "nextScene": "EXPLORE_MORE"
+        }
+      ]
+    },
+
+    "LENA_01": {
+      "id": "LENA_01",
+      "title": "Le Livre Impossible",
+      "activation": "DAY>=1 && DAY<=3 && LENA.AFF>=1",
+      "background": "assets/images/bg_cafe_bookstore.png",
+      "character": "LENA",
+      "dialogues": [
+        {
+          "speaker": "LENA",
+          "text": "Ah, vous revoilà. J'ai un défi pour vous : un roman est quelque part dans ce rayon, mais impossible de mettre la main dessus.",
+          "image": "assets/images/lena_challenge_01.png",
+          "expression": "competitive_smirk"
+        },
+        {
+          "speaker": "LENA",
+          "text": "Je parie que vous ne le trouverez pas sans retourner tout le rayon. Alors, prêt à relever le défi ?",
+          "image": "assets/images/lena_challenge_02.png",
+          "expression": "challenging"
+        }
+      ],
+      "choices": [
+        {
+          "text": "Chercher méthodiquement",
+          "nextScene": "LENA_01_METHODICAL",
+          "effects": {
+            "LENA.RESPECT": 1
+          }
+        },
+        {
+          "text": "Improviser une théorie ridicule",
+          "nextScene": "LENA_01_THEORY",
+          "effects": {
+            "LENA.TENSION": 1,
+            "CHAOS": 1
+          }
+        },
+        {
+          "text": "Lui demander la véritable motivation",
+          "nextScene": "LENA_01_MOTIVATION",
+          "effects": {
+            "HONNETETE": 1,
+            "LENA.AFF": 1
+          }
+        }
+      ]
+    },
+
+    "LENA_01_METHODICAL": {
+      "id": "LENA_01_METHODICAL",
+      "background": "assets/images/bg_cafe_bookstore.png",
+      "character": "LENA",
+      "dialogues": [
+        {
+          "speaker": "narrator",
+          "text": "Vous examinez chaque section du rayon avec méthode, suivant l'ordre alphabétique et les catégories.",
+          "image": "assets/images/lena_searching_01.png",
+          "expression": null
+        },
+        {
+          "speaker": "LENA",
+          "text": "Impressionnant. Vous avez trouvé en moins de cinq minutes. J'aurais mis dix minutes moi-même.",
+          "image": "assets/images/lena_impressed_01.png",
+          "expression": "genuinely_impressed"
+        },
+        {
+          "speaker": "LENA",
+          "text": "Pas mal. Pas mal du tout.",
+          "image": "assets/images/lena_approval_01.png",
+          "expression": "respectful_smile"
+        }
+      ],
+      "choices": [
+        {
+          "text": "Continuer la journée",
+          "nextScene": "DAY_END"
+        }
+      ]
+    },
+
+    "LENA_01_THEORY": {
+      "id": "LENA_01_THEORY",
+      "background": "assets/images/bg_cafe_bookstore.png",
+      "character": "LENA",
+      "dialogues": [
+        {
+          "speaker": "PLAYER",
+          "text": "Évidemment, le livre s'est caché. Il lit probablement les autres livres et refuse d'être trouvé.",
+          "image": "assets/images/player_ridiculous_theory_01.png",
+          "expression": "mock_serious"
+        },
+        {
+          "speaker": "LENA",
+          "text": "... Vous savez que c'est absurde ?",
+          "image": "assets/images/lena_deadpan_02.png",
+          "expression": "flat"
+        },
+        {
+          "speaker": "PLAYER",
+          "text": "Absurde mais poétique.",
+          "image": "assets/images/player_followup_01.png",
+          "expression": "grinning"
+        },
+        {
+          "speaker": "LENA",
+          "text": "Bon, d'accord. C'est un peu drôle. Maintenant aidez-moi à le trouver pour de vrai.",
+          "image": "assets/images/lena_suppressed_laugh_01.png",
+          "expression": "trying_not_to_smile"
+        }
+      ],
+      "choices": [
+        {
+          "text": "Continuer la journée",
+          "nextScene": "DAY_END"
+        }
+      ]
+    },
+
+    "LENA_01_MOTIVATION": {
+      "id": "LENA_01_MOTIVATION",
+      "background": "assets/images/bg_cafe_bookstore.png",
+      "character": "LENA",
+      "dialogues": [
+        {
+          "speaker": "PLAYER",
+          "text": "Pourquoi ce livre en particulier ? Il a une importance pour vous ?",
+          "image": "assets/images/player_genuine_question_01.png",
+          "expression": "gentle_curious"
+        },
+        {
+          "speaker": "LENA",
+          "text": "...",
+          "image": "assets/images/lena_hesitating_01.png",
+          "expression": "guarded"
+        },
+        {
+          "speaker": "LENA",
+          "text": "Il me rappelle quelqu'un. C'est tout.",
+          "image": "assets/images/lena_vulnerable_01.png",
+          "expression": "rare_vulnerability"
+        },
+        {
+          "speaker": "narrator",
+          "text": "Sa voix est plus douce maintenant. Elle détourne brièvement le regard avant de reprendre sa posture habituelle.",
+          "image": "assets/images/lena_composing_01.png",
+          "expression": null
+        },
+        {
+          "speaker": "LENA",
+          "text": "Bon, assez parlé. Aidons-nous mutuellement à le trouver.",
+          "image": "assets/images/lena_refocusing_01.png",
+          "expression": "back_to_business"
+        }
+      ],
+      "choices": [
+        {
+          "text": "Continuer la journée",
+          "nextScene": "DAY_END"
+        }
+      ],
+      "effects": {
+        "flags": {"LENA_VULNERABLE": true}
+      }
+    },
+
+    "MAYA_02": {
+      "id": "MAYA_02",
+      "title": "Karaoké d'Urgence",
+      "activation": "MAYA.AFF>=2 && DAY>=2",
+      "background": "assets/images/bg_evening_party.png",
+      "character": "MAYA",
+      "dialogues": [
+        {
+          "speaker": "narrator",
+          "text": "La soirée bat son plein. Maya vous repère dans la foule et s'approche rapidement.",
+          "image": "assets/images/maya_party_01.png",
+          "expression": null
+        },
+        {
+          "speaker": "MAYA",
+          "text": "J'ai besoin de vous ! La chanteuse prévue vient d'annuler. Tout le monde attend quelque chose !",
+          "image": "assets/images/maya_panic_01.png",
+          "expression": "urgent_pleading"
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Montez sur scène avec moi. S'il vous plaît !",
+          "image": "assets/images/maya_begging_01.png",
+          "expression": "hopeful_desperate"
+        }
+      ],
+      "choices": [
+        {
+          "text": "Chanter sérieusement",
+          "nextScene": "MAYA_02_SERIOUS",
+          "effects": {
+            "MAYA.AFF": 1
+          }
+        },
+        {
+          "text": "Assumer le ridicule",
+          "nextScene": "MAYA_02_RIDICULOUS",
+          "effects": {
+            "AUDACE": 2,
+            "CHAOS": 1,
+            "MAYA.AFF": 1
+          }
+        },
+        {
+          "text": "Refuser avec humour",
+          "nextScene": "MAYA_02_REFUSE",
+          "effects": {
+            "MAYA.CONFIANCE": 1
+          }
+        }
+      ]
+    },
+
+    "MAYA_02_SERIOUS": {
+      "id": "MAYA_02_SERIOUS",
+      "background": "assets/images/bg_evening_party.png",
+      "character": "MAYA",
+      "dialogues": [
+        {
+          "speaker": "narrator",
+          "text": "Vous montez sur scène et donnez le meilleur de vous-même. Votre voix porte dans la salle.",
+          "image": "assets/images/maya_singing_serious_01.png",
+          "expression": null
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Ouais ! C'est ça !",
+          "image": "assets/images/maya_cheering_01.png",
+          "expression": "excited_supportive"
+        },
+        {
+          "speaker": "narrator",
+          "text": "À la fin de la chanson, les applaudissements crépitent. Maya vous sourit largement.",
+          "image": "assets/images/maya_post_song_01.png",
+          "expression": "proud_happy"
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Vous aviez dit que vous ne saviez pas chanter ? Parce que c'était vraiment bien !",
+          "image": "assets/images/maya_compliment_01.png",
+          "expression": "beaming"
+        }
+      ],
+      "choices": [
+        {
+          "text": "Continuer la soirée",
+          "nextScene": "DAY_END"
+        }
+      ]
+    },
+
+    "MAYA_02_RIDICULOUS": {
+      "id": "MAYA_02_RIDICULOUS",
+      "background": "assets/images/bg_evening_party.png",
+      "character": "MAYA",
+      "dialogues": [
+        {
+          "speaker": "narrator",
+          "text": "Vous montez sur scène et assumez complètement le spectacle. Gestes exagérés, notes approximatives, mais quelle énergie !",
+          "image": "assets/images/maya_singing_ridiculous_01.png",
+          "expression": null
+        },
+        {
+          "speaker": "MAYA",
+          "text": "HA HA HA ! C'est exactement ce qu'il fallait !",
+          "image": "assets/images/maya_laughing_hard_01.png",
+          "expression": "uncontrollable_laughter"
+        },
+        {
+          "speaker": "narrator",
+          "text": "La foule rit et applaudit. Maya essuie une larme de rire.",
+          "image": "assets/images/maya_tears_of_laughter_01.png",
+          "expression": null
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Vous êtes incroyable ! On refera ça un jour !",
+          "image": "assets/images/maya_excited_future_01.png",
+          "expression": "thrilled"
+        }
+      ],
+      "choices": [
+        {
+          "text": "Continuer la soirée",
+          "nextScene": "DAY_END"
+        }
+      ],
+      "effects": {
+        "flags": {"MAYA_FOU_RIRE": true}
+      }
+    },
+
+    "MAYA_02_REFUSE": {
+      "id": "MAYA_02_REFUSE",
+      "background": "assets/images/bg_evening_party.png",
+      "character": "MAYA",
+      "dialogues": [
+        {
+          "speaker": "PLAYER",
+          "text": "Désolé, mais si je chante, les voisins vont appeler la police. Je préfère vous soutenir depuis le public !",
+          "image": "assets/images/player_polite_refusal_01.png",
+          "expression": "apologetic_joking"
+        },
+        {
+          "speaker": "MAYA",
+          "text": "Bon, d'accord. Mais vous devrez au moins applaudir très fort !",
+          "image": "assets/images/maya_accepting_01.png",
+          "expression": "understanding_smile"
+        },
+        {
+          "speaker": "narrator",
+          "text": "Elle monte sur scène seule et sauve la soirée avec brio. Vous l'applaudissez sincèrement.",
+          "image": "assets/images/maya_solo_performance_01.png",
+          "expression": null
+        }
+      ],
+      "choices": [
+        {
+          "text": "Continuer la soirée",
+          "nextScene": "DAY_END"
+        }
+      ]
+    },
+
+    "INES_02": {
+      "id": "INES_02",
+      "title": "Parler par Images",
+      "activation": "INES.AFF>=2",
+      "background": "assets/images/bg_street_walk.png",
+      "character": "INES",
+      "dialogues": [
+        {
+          "speaker": "INES",
+          "text": "Je faisais une promenade photo. Vous voulez venir ? J'ai une consigne pour vous.",
+          "image": "assets/images/ines_invitation_01.png",
+          "expression": "calm_inviting"
+        },
+        {
+          "speaker": "INES",
+          "text": "Photographiez quelque chose que les autres ne remarquent pas. Montrez-moi ce que vous voyez.",
+          "image": "assets/images/ines_instruction_01.png",
+          "expression": "thoughtful"
+        }
+      ],
+      "choices": [
+        {
+          "text": "Photographier une petite scène humaine",
+          "nextScene": "INES_02_HUMAN",
+          "effects": {
+            "INES.AFF": 2
+          }
+        },
+        {
+          "text": "Photographier une architecture",
+          "nextScene": "INES_02_ARCHITECTURE",
+          "effects": {
+            "INES.RESPECT": 1
+          }
+        },
+        {
+          "text": "Photographier un détail drôle",
+          "nextScene": "INES_02_FUNNY",
+          "effects": {
+            "INES.TENSION": 1,
+            "INES.AFF": 1
+          }
+        }
+      ]
+    },
+
+    "INES_02_HUMAN": {
+      "id": "INES_02_HUMAN",
+      "background": "assets/images/bg_street_walk.png",
+      "character": "INES",
+      "dialogues": [
+        {
+          "speaker": "narrator",
+          "text": "Vous capturez un moment intime : un enfant partageant son goûter avec un pigeon, un vieil homme lisant sur un banc...",
+          "image": "assets/images/ines_human_photo_01.png",
+          "expression": null
+        },
+        {
+          "speaker": "INES",
+          "text": "C'est beau. Vous avez vu ce que je voulais dire. Les petites choses passent inaperçues.",
+          "image": "assets/images/ines_appreciating_01.png",
+          "expression": "soft_approving"
+        },
+        {
+          "speaker": "INES",
+          "text": "Merci de partager ça avec moi.",
+          "image": "assets/images/ines_grateful_quiet_01.png",
+          "expression": "warm_quiet"
+        }
+      ],
+      "choices": [
+        {
+          "text": "Continuer la journée",
+          "nextScene": "DAY_END"
+        }
+      ]
+    },
+
+    "INES_02_ARCHITECTURE": {
+      "id": "INES_02_ARCHITECTURE",
+      "background": "assets/images/bg_street_walk.png",
+      "character": "INES",
+      "dialogues": [
+        {
+          "speaker": "narrator",
+          "text": "Vous photographiez les lignes d'un bâtiment ancien, les jeux d'ombre et de lumière sur la pierre.",
+          "image": "assets/images/ines_architecture_photo_01.png",
+          "expression": null
+        },
+        {
+          "speaker": "INES",
+          "text": "Intéressant. Vous avez l'œil pour les structures. C'est une approche différente de la mienne.",
+          "image": "assets/images/ines_analyzing_01.png",
+          "expression": "analytical_respectful"
+        }
+      ],
+      "choices": [
+        {
+          "text": "Continuer la journée",
+          "nextScene": "DAY_END"
+        }
+      ]
+    },
+
+    "INES_02_FUNNY": {
+      "id": "INES_02_FUNNY",
+      "background": "assets/images/bg_street_walk.png",
+      "character": "INES",
+      "dialogues": [
+        {
+          "speaker": "narrator",
+          "text": "Vous trouvez un détail absurde : un chat perché sur une boîte aux lettres, une affiche décollée formant un visage comique...",
+          "image": "assets/images/ines_funny_photo_01.png",
+          "expression": null
+        },
+        {
+          "speaker": "INES",
+          "text": "...",
+          "image": "assets/images/ines_stoic_01.png",
+          "expression": "neutral"
+        },
+        {
+          "speaker": "narrator",
+          "text": "Un coin de sa bouche se soulève imperceptiblement.",
+          "image": "assets/images/ines_almost_smile_01.png",
+          "expression": null
+        },
+        {
+          "speaker": "INES",
+          "text": "C'est... inattendu. J'aime bien.",
+          "image": "assets/images/ines_admitting_01.png",
+          "expression": "slightly_amused"
+        }
+      ],
+      "choices": [
+        {
+          "text": "Continuer la journée",
+          "nextScene": "DAY_END"
+        }
+      ]
+    },
+
+    "DAY_END": {
+      "id": "DAY_END",
+      "background": "assets/images/bg_sunset.png",
+      "dialogues": [
+        {
+          "speaker": "narrator",
+          "text": "Le soleil se couche sur le quartier. La première journée touche à sa fin.",
+          "image": "assets/images/sunset_neighborhood_01.png",
+          "expression": null
+        },
+        {
+          "speaker": "narrator",
+          "text": "De nouvelles rencontres vous attendent demain. Qui choisirez-vous de revoir ?",
+          "image": "assets/images/day_end_choices_01.png",
+          "expression": null
+        }
+      ],
+      "choices": [
+        {
+          "text": "Fin du Jour 1",
+          "nextScene": null,
+          "endDay": true
+        }
+      ]
+    },
+
+    "EXPLORE_MORE": {
+      "id": "EXPLORE_MORE",
+      "background": "assets/images/bg_neighborhood_exploration.png",
+      "dialogues": [
+        {
+          "speaker": "narrator",
+          "text": "Vous explorez d'autres recoins du quartier. De nouveaux visages, de nouvelles opportunités.",
+          "image": "assets/images/exploration_01.png",
+          "expression": null
+        },
+        {
+          "speaker": "narrator",
+          "text": "Mais pour aujourd'hui, vous avez suffisamment découvert. Il est temps de revenir sur vos pas.",
+          "image": "assets/images/exploration_02.png",
+          "expression": null
+        }
+      ],
+      "choices": [
+        {
+          "text": "Retourner au point de départ",
+          "nextScene": "DAY_END"
+        }
+      ]
+    }
+  },
+
+  "endings": {
+    "FIN_A": {
+      "name": "Une Préférence Se Dessine",
+      "condition": "oneHeroineAff>=7",
+      "description": "Une relation privilégiée commence à se former."
+    },
+    "FIN_B": {
+      "name": "Double Allégeance Émotionnelle",
+      "condition": "twoHeroinesAff>=6 && noneBelow3",
+      "description": "Deux relations se développent simultanément."
+    },
+    "FIN_C": {
+      "name": "Le Chaos Magnifique",
+      "condition": "CHAOS>=6 && REPUTATION>=2",
+      "description": "Tout le quartier vous connaît maintenant."
+    },
+    "FIN_D": {
+      "name": "Le Cœur Discret",
+      "condition": "HONNETETE>=5 && oneHeroineAff>=6 && noRumors",
+      "description": "Des dialogues plus intimes s'ouvrent."
+    },
+    "FIN_E": {
+      "name": "Mauvaise Impression",
+      "condition": "REPUTATION<=-2 || twoHeroinesAff<=1",
+      "description": "Le chapitre 2 sera plus difficile."
+    }
+  },
+
+  "images": {
+    "prompts": {
+      "bg_neighborhood": "A charming European-style neighborhood street, warm sunlight, cafes and small shops, peaceful morning atmosphere, digital art style suitable for visual novel background",
+      "bg_cafe_bookstore": "Interior of a cozy café-bookstore hybrid, wooden shelves filled with books, tables with coffee cups, warm lighting, inviting atmosphere, visual novel background",
+      "bg_market_square": "Bustling outdoor market square, colorful stalls with fresh produce, people walking around, sunny day, vibrant colors, visual novel background",
+      "bg_photo_studio": "Small photography studio exterior, vintage camera equipment visible through window, artistic neighborhood corner, soft natural lighting, visual novel background",
+      "bg_evening_party": "Evening street party scene, string lights, people mingling, festive atmosphere, warm glow, visual novel background",
+      "bg_street_walk": "Quiet residential street perfect for photography, interesting architecture, dappled sunlight through trees, peaceful afternoon, visual novel background",
+      "bg_sunset": "Beautiful sunset over the neighborhood, golden hour lighting, silhouettes of buildings, romantic atmosphere, visual novel background",
+      "bg_neighborhood_afternoon": "Same neighborhood street but in afternoon light, slightly different shadows, relaxed atmosphere, visual novel background",
+      "opening_01": "Newcomer arriving at a charming neighborhood, first person perspective seeing the street ahead, hopeful new beginning atmosphere, visual novel CG",
+      "opening_02": "Three different locations visible from a viewpoint: a café-bookstore, a market square, and a photo studio, choice presentation image, visual novel style",
+      "lena_greeting_01": "Young woman Lena, 24 years old, dark brown wavy shoulder-length hair, hazel eyes, wearing casual work clothes with apron, neutral expression, standing in café-bookstore, waist-up portrait, visual novel character sprite",
+      "lena_greeting_02": "Lena looking slightly annoyed, eyebrows slightly furrowed, holding a clipboard, café-bookstore background, visual novel character sprite",
+      "lena_request_01": "Lena with hopeful expression, hands clasped together slightly, asking for help, warm lighting, visual novel character sprite",
+      "lena_smile_01": "Lena with small genuine smile, shoulders relaxed, grateful expression, visual novel character sprite",
+      "lena_counter_view": "View from behind café counter, looking out at customers, Lena's figure visible in background between bookshelves, visual novel scene",
+      "lena_grateful_01": "Lena with warm smile, body language open and thankful, visual novel character sprite",
+      "lena_surprised_01": "Lena looking surprised, eyes widened slightly, mouth slightly open, unexpected offer of help, visual novel character sprite",
+      "lena_finding_01": "Lena finding something behind books, reaching into shelf, moment of discovery, visual novel character sprite",
+      "lena_relieved_01": "Lena relieved, shoulders dropped, genuine smile of gratitude, visual novel character sprite",
+      "lena_staring_01": "Lena with deadpan expression, flat stare, unimpressed by joke, visual novel character sprite",
+      "lena_smirking_01": "Lena with amused smirk, one corner of mouth raised, finding something mildly funny, visual novel character sprite",
+      "lena_walking_away_01": "Lena walking away towards bookshelves, small smile visible, back partially turned, visual novel character sprite",
+      "player_joking_01": "Player character making a joke, playful expression, hands gesturing, friendly atmosphere, visual novel character representation",
+      "player_helping_01": "Player character offering help, kind sincere expression, hand extended, visual novel character representation",
+      "player_teasing_01": "Player character teasing gently, playful smirk, friendly eyes, visual novel character representation",
+      "player_curious_01": "Player character showing curiosity, head tilted slightly, interested expression, visual novel character representation",
+      "player_apologetic_01": "Player character apologizing sincerely, humble posture, genuine expression, visual novel character representation",
+      "player_posing_01": "Player character striking a deliberate pose, confident smile, playful attitude, visual novel character representation",
+      "player_curious_photo_01": "Player character asking to see photo, interested and respectful expression, visual novel character representation",
+      "player_polite_01": "Player character politely declining, apologetic but firm, respectful body language, visual novel character representation",
+      "player_ridiculous_theory_01": "Player character explaining ridiculous theory with mock seriousness, exaggerated expression, visual novel character representation",
+      "player_followup_01": "Player character following up joke with grin, confident playful demeanor, visual novel character representation",
+      "player_genuine_question_01": "Player character asking genuine caring question, gentle curious expression, soft eyes, visual novel character representation",
+      "maya_struggling_01": "Young woman Maya, 26 years old, voluminous brown hair with copper highlights, green-hazel eyes, athletic build, struggling with multiple shopping bags, flustered but happy expression, outdoor market setting, visual novel character sprite",
+      "maya_bags_01": "Maya holding too many bags, one bag looking very heavy, determined but overwhelmed expression, market background, visual novel character sprite",
+      "maya_introducing_01": "Maya with bright enthusiastic smile, introducing herself, energetic body language, visual novel character sprite",
+      "maya_relieved_01": "Maya relieved, grateful smile, handing over heavy bag, visual novel character sprite",
+      "maya_walking_together_01": "Maya walking alongside player, carrying remaining bags, conversation happening, visual novel scene",
+      "maya_excited_01": "Maya excited, animated expression, talking about evening party, visual novel character sprite",
+      "maya_defensive_01": "Maya mock offended then laughing, hand on hip, playful defensive posture, visual novel character sprite",
+      "maya_music_reaction_01": "Maya reacting to street music, face lighting up, body starting to move to rhythm, visual novel character sprite",
+      "maya_dance_invitation_01": "Maya with playful challenging expression, extending hand for dance, inviting gesture, visual novel character sprite",
+      "maya_dancing_01": "Maya dancing joyfully, arms raised, pure happiness on face, dynamic pose, visual novel character sprite",
+      "maya_post_dance_01": "Maya breathless after dancing, happy flushed face, big smile, visual novel character sprite",
+      "maya_understanding_01": "Maya understanding, friendly accepting smile, no hard feelings, visual novel character sprite",
+      "maya_protective_01": "Maya slightly guarded, closing bag protectively, polite but less open expression, visual novel character sprite",
+      "maya_closing_bag_01": "Maya quickly closing bag, subtle body language shift, visual novel character sprite",
+      "market_bustling_01": "Busy market scene from player perspective, colorful stalls, people browsing, sensory details implied, visual novel scene",
+      "ines_working_01": "Young woman Inès, 25 years old, long straight dark brown hair, dark brown eyes, slender build, holding professional camera, concentrated expression, outside photo studio, visual novel character sprite",
+      "ines_focused_01": "Inès intensely focused through camera viewfinder, serious concentrated expression, finger on shutter, visual novel character sprite",
+      "ines_looking_01": "Inès lowering camera, looking directly at viewer, calm direct gaze, neutral expression, visual novel character sprite",
+      "ines_introducing_01": "Inès introducing herself calmly, professional but approachable, slight polite distance, visual novel character sprite",
+      "ines_soft_smile_01": "Inès with small genuine smile, rare warmth showing, eyes softer than usual, visual novel character sprite",
+      "ines_back_to_work_01": "Inès returning to photography work, occasional glances toward player, visual novel scene",
+      "ines_surprised_01": "Inès taken aback by unexpected pose, eyes widened slightly, camera lowered, visual novel character sprite",
+      "ines_click_01": "Close-up of camera shutter clicking, moment captured, Inès's finger pressing button, visual novel detail shot",
+      "ines_reviewing_01": "Inès reviewing photo on camera screen, slightly impressed expression, visual novel character sprite",
+      "ines_showing_photo_01": "Inès hesitantly showing camera screen to player, vulnerable sharing moment, visual novel character sprite",
+      "ines_photo_display_01": "Close-up of camera screen showing artistic neighborhood photo, unique perspective visible, visual novel insert",
+      "ines_explaining_01": "Inès explaining her photography philosophy, passionate expression, eyes animated, visual novel character sprite",
+      "inaffectionate_01": "Artistic photo of neighborhood from unique angle, beautiful composition showing hidden beauty, visual novel photo insert",
+      "lena_challenge_01": "Lena with competitive smirk, challenging expression, arms crossed confidently, visual novel character sprite",
+      "lena_challenge_02": "Lena leaning forward slightly, challenging the player, eyes intense, visual novel character sprite",
+      "lena_searching_01": "Lena searching through bookshelves, focused expression, surrounded by books, visual novel character sprite",
+      "lena_impressed_01": "Lena genuinely impressed, eyebrows raised, authentic appreciation showing, visual novel character sprite",
+      "lena_approval_01": "Lena giving respectful smile of approval, body language warmer than usual, visual novel character sprite",
+      "lena_deadpan_02": "Lena completely flat expression, staring blankly, unimpressed, visual novel character sprite",
+      "lena_suppressed_laugh_01": "Lena trying not to smile, lips pressed together, amusement breaking through, visual novel character sprite",
+      "lena_hesitating_01": "Lena hesitating, guard coming up, conflicted expression, visual novel character sprite",
+      "lena_vulnerable_01": "Lena showing rare vulnerability, softer eyes, voice quieter, emotional walls down briefly, visual novel character sprite",
+      "lena_composing_01": "Lena composing herself, regaining professional demeanor, subtle transition, visual novel character sprite",
+      "lena_refocusing_01": "Lena refocusing on task, business-like expression returning, but warmer underneath, visual novel character sprite",
+      "maya_party_01": "Evening party scene, Maya spotting player in crowd, festive lights in background, visual novel scene",
+      "maya_panic_01": "Maya panicked urgent expression, hands gesturing frantically, needing help now, visual novel character sprite",
+      "maya_begging_01": "Maya begging hopefully, hands clasped, desperate but still cheerful, visual novel character sprite",
+      "maya_singing_serious_01": "Maya singing seriously on stage, microphone in hand, focused performance expression, visual novel character sprite",
+      "maya_cheering_01": "Maya cheering enthusiastically, supporting from side of stage, excited expression, visual novel character sprite",
+      "maya_post_song_01": "Maya proud and happy after song, beaming at player, applause in background, visual novel character sprite",
+      "maya_compliment_01": "Maya giving enthusiastic compliment, wide genuine smile, impressed, visual novel character sprite",
+      "maya_singing_ridiculous_01": "Maya singing ridiculously on stage, exaggerated gestures, having fun, comedic moment, visual novel character sprite",
+      "maya_laughing_hard_01": "Maya laughing uncontrollably, head thrown back, tears of laughter, visual novel character sprite",
+      "maya_tears_of_laughter_01": "Maya wiping tears from laughing, still giggling, joyful chaos, visual novel character sprite",
+      "maya_excited_future_01": "Maya thrilled about future plans, animated excited expression, already planning next time, visual novel character sprite",
+      "maya_polite_refusal_01": "Player politely refusing with humor, apologetic but joking, friendly decline, visual novel character representation",
+      "maya_accepting_01": "Maya accepting refusal gracefully, understanding smile, no hard feelings, visual novel character sprite",
+      "maya_solo_performance_01": "Maya performing solo on stage, confident, saving the show, crowd enjoying, visual novel scene",
+      "ines_invitation_01": "Inès calmly inviting player on photo walk, peaceful expression, camera ready, visual novel character sprite",
+      "ines_instruction_01": "Inès giving thoughtful instruction, contemplative expression, sharing her passion, visual novel character sprite",
+      "ines_human_photo_01": "Photo of small human moment - child with pigeon or elderly person reading, touching scene, visual novel photo insert",
+      "ines_appreciating_01": "Inès appreciating player's photo, soft approving expression, touched, visual novel character sprite",
+      "ines_grateful_quiet_01": "Inès quietly grateful, warm subtle smile, deep appreciation, visual novel character sprite",
+      "ines_architecture_photo_01": "Architectural photo showing lines and light play on old building, artistic composition, visual novel photo insert",
+      "ines_analyzing_01": "Inès analyzing photo with analytical respect, thoughtful consideration, visual novel character sprite",
+      "ines_funny_photo_01": "Funny photo of cat on mailbox or peeling poster forming face, humorous detail, visual novel photo insert",
+      "ines_stoic_01": "Inès maintaining stoic expression, neutral face, hiding reaction, visual novel character sprite",
+      "ines_almost_smile_01": "Corner of Inès's mouth lifting almost imperceptibly, barely contained amusement, visual novel character detail",
+      "ines_admitting_01": "Inès admitting she likes something, slightly amused expression, rare admission, visual novel character sprite",
+      "afternoon_transition_01": "Neighborhood transitioning to afternoon, sun position changed, shadows longer, peaceful mood, visual novel background",
+      "afternoon_choices_01": "Multiple paths visible in neighborhood afternoon, symbolic of choices ahead, visual novel scene",
+      "sunset_neighborhood_01": "Beautiful sunset over neighborhood, golden orange sky, silhouettes of buildings and trees, end of day atmosphere, visual novel background",
+      "day_end_choices_01": "Evening falling on neighborhood, windows lighting up, contemplative mood, tomorrow awaits, visual novel scene",
+      "exploration_01": "Player exploring hidden corners of neighborhood, discovering new sights, curious atmosphere, visual novel scene",
+      "exploration_02": "Player deciding to return, satisfied with exploration, neighborhood familiar now, visual novel scene"
+    }
+  }
+}
