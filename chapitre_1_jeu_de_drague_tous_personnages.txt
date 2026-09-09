@@ -1,0 +1,1394 @@
+CHAPITRE 1 — PREMIERS CONTACTS
+Jeu de drague narrative à embranchements
+Document de scénario / conditions d’activation / conséquences
+
+============================================================
+0. PARAMÈTRES GÉNÉRAUX
+============================================================
+
+NOTE DE CONTENU
+- Tous les personnages principaux sont majeurs (18+).
+- Le chapitre repose sur la séduction, la tension romantique, les malentendus, les rivalités,
+  les jeux sociaux et des situations "spicy" non graphiques.
+- Les scènes intimes restent suggestives : regards, proximité, baisers éventuels, flirt,
+  jalousie, sous-entendus et consentement explicite.
+- Aucune scène ne doit présenter comme sexy une contrainte, une incapacité à consentir
+  ou une situation d’abus.
+
+OBJECTIF DU CHAPITRE
+Introduire trois routes de romance très différentes, faire découvrir le système de réputation
+et créer assez de croisements pour qu’une relation avec l’une des héroïnes influence
+les deux autres.
+
+PERSONNAGE-JOUEUR
+Nom variable : PLAYER
+Statut : nouvelle recrue / nouveau voisin / nouveau venu dans le quartier.
+Traits éventuels :
+  CHARME
+  ASSURANCE
+  HUMOUR
+  EMPATHIE
+  AUDACE
+  DISCRÉTION
+
+HÉROÏNES
+1) LÉNA VERNET — 24 ans
+   Profil : brillante, sarcastique, très compétitive, travaille dans un café-librairie.
+   Vibe : ennemies-to-lovers / joutes verbales / respect mérité.
+   Points sensibles : déteste être manipulée, apprécie les gens qui tiennent parole.
+   Route cœur : LV
+   Variables principales : AFF_LENA, RESPECT_LENA, TENSION_LENA
+
+2) MAYA RIVIÈRE — 26 ans
+   Profil : extravertie, musicienne amateur, fêtarde organisée, connaît tout le monde.
+   Vibe : friends-to-lovers / complicité / chaos social.
+   Points sensibles : peur d’être "toujours la copine sympa".
+   Route cœur : MR
+   Variables principales : AFF_MAYA, CONFIANCE_MAYA, TENSION_MAYA
+
+3) INÈS DELCOURT — 25 ans
+   Profil : réservée, directe, photographe indépendante, observatrice.
+   Vibe : slow burn / mystère / intimité émotionnelle.
+   Points sensibles : déteste les grands numéros de séduction et les faux-semblants.
+   Route cœur : ID
+   Variables principales : AFF_INES, SEcurite_INES, TENSION_INES
+
+VARIABLES GLOBALES
+DAY = jour courant
+TIME = créneau (MATIN / APRÈS-MIDI / SOIR / NUIT)
+REPUTATION = réputation générale du joueur, de -3 à +5
+AUDACE = choix osés cumulés
+HONNÊTETÉ = choix sincères cumulés
+CHAOS = nombre de situations sociales ayant dégénéré
+SECRET_LENA = 0/1
+SECRET_MAYA = 0/1
+SECRET_INES = 0/1
+RIVALITE = 0/1
+TRIANGLE = 0/1
+PROMESSE_1 = identifiant de promesse donnée au chapitre
+RUMEUR_1 = identifiant de rumeur active
+COEUR_CIBLE = LENA / MAYA / INES / NONE
+
+SEUILS CONSEILLÉS
+Affection :
+  0–2 = connaissance
+  3–5 = intérêt
+  6–8 = flirt actif
+  9+  = route privilégiée
+Tension :
+  0–2 = neutre
+  3–5 = sous-entendus
+  6–8 = chimie visible
+  9+  = presque-aveu
+Réputation :
+  -3 = méfiance collective
+  0 = neutre
+  +2 = bonne impression
+  +4 = très apprécié
+
+FORMAT DE CONDITION
+[ACTIVATION: DAY>=1 & TIME=... & condition]
+[CHOIX: option -> effets]
+[BRANCHE: identifiant]
+[CONSEQUENCE: effet immédiat]
+[PERSISTANT: effet jusqu’à la fin du chapitre]
+[VERROU: empêche une scène]
+[DÉVERROU: rend une scène disponible]
+
+============================================================
+1. SCÈNE D’OUVERTURE — "UNE PLACE À PRENDRE"
+============================================================
+
+[ACTIVATION: DAY=1 & TIME=MATIN]
+
+Le joueur arrive dans le quartier et doit choisir où s'arrêter :
+A. Le café-librairie "Le Signet"
+B. La place centrale et son marché
+C. Le petit studio photo au coin de la rue
+
+CHOIX A — LE SIGNET
+[ACTIVATION: toujours disponible]
+Rencontre initiale avec LÉNA.
+Elle demande au joueur de surveiller brièvement la caisse pendant qu’elle cherche
+une livraison égarée.
+Si PLAYER accepte :
+  RESPECT_LENA +1
+  HONNÊTETÉ +1
+Si PLAYER fouille la pile de courrier "pour aider" :
+  RESPECT_LENA -1
+  FLAG_LENA_FOUILLE = 1
+Si PLAYER fait une blague absurde sur les livres :
+  AFF_LENA +1 si HUMOUR>=1
+  TENSION_LENA +1 si choix confiant
+
+CHOIX B — MARCHÉ
+[ACTIVATION: toujours disponible]
+Rencontre initiale avec MAYA, qui transporte trop de sacs et prétend gérer parfaitement
+la situation.
+Si PLAYER aide :
+  AFF_MAYA +1
+  CONFIANCE_MAYA +1
+Si PLAYER se moque gentiment :
+  TENSION_MAYA +1
+  CHAOS +1 si la plaisanterie fait tomber un sac
+Événement comique : un musicien de rue lance soudain la chanson préférée de MAYA.
+Elle embarque presque le joueur dans une mini-danse.
+Si PLAYER accepte :
+  AFF_MAYA +1
+  AUDACE +1
+
+CHOIX C — STUDIO PHOTO
+[ACTIVATION: toujours disponible]
+Rencontre initiale avec INÈS.
+Elle photographie la rue et demande au joueur de ne pas passer devant son objectif.
+Si PLAYER s’excuse immédiatement :
+  AFF_INES +1
+  SEcurite_INES +1
+Si PLAYER pose volontairement pour la photo :
+  TENSION_INES +1
+  AUDACE +1
+Si PLAYER demande à voir le cliché :
+  DÉVERROU: INES_PHOTO_1
+
+COMMUN
+À la fin :
+DAY reste 1
+TIME = MIDI
+Le choix initial modifie la première héroïne croisée et ajoute un petit bonus de relation.
+
+============================================================
+2. SYSTÈME DE "RENDEZ-VOUS IMPROVISÉS"
+============================================================
+
+Chaque jour, au moins une rencontre contextuelle peut être déclenchée.
+
+Règle :
+  Si aucune relation >=3 :
+      pondération équivalente entre les trois héroïnes.
+  Si une relation >=5 :
+      +20% de chance pour cette héroïne.
+  Si deux relations >=5 :
+      risque de scène croisée +15%.
+  Si CHAOS>=3 :
+      au moins une scène comique forcée par jour.
+  Si HONNÊTETÉ>=3 :
+      les dialogues vulnérables deviennent disponibles plus tôt.
+  Si AUDACE>=3 :
+      les dialogues de flirt direct deviennent disponibles plus tôt.
+
+============================================================
+3. LÉNA — ROUTE "PIQUES ET ÉTINCELLES"
+============================================================
+
+LENA_01 — "LE LIVRE IMPOSSIBLE"
+[ACTIVATION: DAY=1..3 & AFF_LENA>=1]
+
+Léna affirme qu’un roman introuvable est rangé quelque part.
+Elle met le joueur au défi de le retrouver sans retourner tout le rayon.
+
+CHOIX:
+A. Chercher méthodiquement
+  RESPECT_LENA +1
+B. Improviser une théorie ridicule
+  TENSION_LENA +1
+  CHAOS +1
+C. Lui demander la véritable motivation
+  HONNÊTETÉ +1
+  AFF_LENA +1
+
+BRANCHE C :
+Léna révèle que le livre lui rappelle quelqu’un.
+[FLAG: LENA_VULNERABLE = 1]
+[DÉVERROU: LENA_QUIET_MOMENT]
+
+LENA_02 — "TROP PRÈS"
+[ACTIVATION: AFF_LENA>=3 & RESPECT_LENA>=2 & TIME=APRÈS-MIDI]
+
+Alors que PLAYER atteint une étagère haute, Léna passe derrière pour attraper le même
+livre. Ils se retrouvent à quelques centimètres.
+
+CHOIX:
+A. Reculer immédiatement
+  RESPECT_LENA +1
+B. Sourire et maintenir le regard
+  TENSION_LENA +2
+C. Faire une remarque légère
+  TENSION_LENA +1
+  HUMOUR si disponible
+
+Si TENSION_LENA>=6 :
+  Léna murmure qu’elle commence à se méfier du sourire du joueur.
+  [PERSISTANT: elle initie plus souvent le flirt]
+
+LENA_03 — "FERMETURE TARDIVE"
+[ACTIVATION: DAY>=2 & AFF_LENA>=4 & TIME=NUIT]
+
+Le joueur aide à fermer le café-librairie.
+Une panne de lumière plonge brièvement la boutique dans l’obscurité.
+
+OPTIONS:
+A. Rester calmement jusqu’au retour du courant
+  RESPECT_LENA +1
+B. Lancer une improvisation humoristique avec une lampe de téléphone
+  AFF_LENA +1
+C. Demander si elle veut parler de ce qui la préoccupe
+  HONNÊTETÉ +1
+  LENA_VULNERABLE = 1
+
+SCÈNE SPICY :
+Quand la lumière revient, ils se rendent compte qu’ils étaient très proches.
+Si TENSION_LENA>=5 :
+  [DÉVERROU: BAISER_LENA_SOFT]
+Cette scène reste annulable au dernier moment par l’un ou l’autre personnage.
+
+LENA_04 — "LE MENSONGE QUI SE VOIT"
+[ACTIVATION: AFF_LENA>=4 & HONNÊTETÉ<=1]
+
+Léna comprend que PLAYER lui cache quelque chose.
+CHOIX:
+A. Avouer
+  HONNÊTETÉ +2
+  RESPECT_LENA +2
+B. Esquiver
+  RESPECT_LENA -2
+C. Inventer un faux prétexte
+  RUMEUR_1 = LENA_MENSONGE
+
+VERROU:
+Si RUMEUR_1 active, LENA_05 devient indisponible jusqu’à réparation.
+
+LENA_05 — "LE DÉFI PUBLIC"
+[ACTIVATION: AFF_LENA>=5 & RESPECT_LENA>=4 & RUMEUR_1=0]
+
+Léna propose un pari : le joueur doit convaincre trois clients difficiles de tester
+un livre qu’elle adore.
+
+RÉUSSITE:
+  RESPECT_LENA +2
+  AFF_LENA +1
+  [DÉVERROU: LENA_SOIR_PRIVATE]
+ÉCHEC:
+  RESPECT_LENA +0
+  CHAOS +1
+  Léna rit franchement et considère cela comme un point pour elle.
+
+LENA_06 — "SOIR PRIVÉ"
+[ACTIVATION: LENA_05 réussi & TIME=SOIR]
+
+Léna propose un thé après fermeture, sans public.
+Dialogue sur leurs premières impressions mutuelles.
+
+CHOIX:
+A. "Je pensais que tu serais insupportable."
+  TENSION_LENA +2
+B. "Tu m’impressionnes."
+  AFF_LENA +2
+C. "Je ne sais toujours pas si je te fais confiance."
+  RESPECT_LENA +1 ; TENSION_LENA +1
+
+FIN DE ROUTE CHAPITRE 1:
+Si AFF_LENA>=7 & TENSION_LENA>=6 :
+  [FLAG: LENA_ROUTE_ACTIVE = 1]
+  [DÉVERROU: CH1_LENA_ALMOST_KISS]
+
+============================================================
+4. MAYA — ROUTE "CHAOS, COMPLICITÉ ET MUSIQUE"
+============================================================
+
+MAYA_01 — "LE SAC DE TROP"
+[ACTIVATION: DAY=1..2 & AFF_MAYA>=1]
+
+Maya demande de transporter un sac "léger".
+Il est absurdement lourd.
+
+CHOIX:
+A. Porter sans commenter
+  CONFIANCE_MAYA +1
+B. Se plaindre théâtralement
+  AFF_MAYA +1
+C. Ouvrir le sac par curiosité
+  CONFIANCE_MAYA -1
+
+Si C :
+Le sac contient des câbles, des vinyles et un objet personnel.
+Maya récupère le sac sans colère, mais demande au joueur de respecter ses affaires.
+
+MAYA_02 — "KARAOKÉ D'URGENCE"
+[ACTIVATION: AFF_MAYA>=2 & DAY>=2 & TIME=SOIR]
+
+Une soirée improvisée tourne mal : la chanteuse prévue annule.
+Maya pousse PLAYER sur scène.
+
+CHOIX:
+A. Chanter sérieusement
+  AFF_MAYA +1
+B. Assumer le ridicule
+  AUDACE +2 ; CHAOS +1 ; AFF_MAYA +1
+C. Refuser avec humour
+  CONFIANCE_MAYA +1
+
+Si PLAYER choisit B et réussit un test d’HUMOUR :
+  [FLAG: MAYA_FOU_RIRE]
+  TENSION_MAYA +2
+
+MAYA_03 — "LA PHOTO QUI SEMBLE COMPROMETTANTE"
+[ACTIVATION: CHAOS>=1 & AFF_MAYA>=3]
+
+Une photo prise pendant la soirée montre Maya et PLAYER très proches.
+Un ami commun l’envoie dans le groupe de discussion.
+
+CHOIX:
+A. "On dirait presque un couple."
+  TENSION_MAYA +2
+B. Faire immédiatement démentir la rumeur
+  TENSION_MAYA -1
+C. Laisser Maya répondre
+  CONFIANCE_MAYA +1
+
+BRANCHE C :
+Maya répond quelque chose de volontairement ambigu.
+[RIVALITE +1 si LENA ou INES ont déjà AFF>=3]
+
+MAYA_04 — "DANSÉ(E) SANS PRÉVENIR"
+[ACTIVATION: TENSION_MAYA>=4 & TIME=NUIT]
+
+Maya entraîne PLAYER dans une danse improvisée.
+Elle demande explicitement :
+"Je peux ?"
+
+CHOIX:
+A. Oui
+  TENSION_MAYA +2
+B. Pas ce soir
+  CONFIANCE_MAYA +1
+C. "Seulement si tu me laisses choisir la chanson."
+  TENSION_MAYA +1
+  AUDACE +1
+
+Si A et TENSION_MAYA>=6 :
+  [DÉVERROU: MAYA_BAISER_OPTIONNEL]
+Le baiser est précédé d’un échange verbal clair et peut être refusé sans pénalité.
+
+MAYA_05 — "LA FÊTE QUI DÉRAPE"
+[ACTIVATION: DAY>=3 & CHAOS>=2 & AFF_MAYA>=4]
+
+Une fête de quartier accumule les incidents :
+- ballon lancé dans une fenêtre
+- playlist interrompue
+- gâteau renversé
+- ami disparu dans un magasin voisin
+
+Le joueur et Maya doivent réparer la situation.
+
+SYSTÈME DE RÉUSSITE:
+  0–1 incident réparé : échec humoristique
+  2–3 : succès
+  4+ : succès exceptionnel
+
+EFFETS:
+Succès : CONFIANCE_MAYA +2 ; REPUTATION +1
+Échec : CHAOS +2 ; Maya trouve cela hilarant malgré tout, AFF_MAYA +1
+
+MAYA_06 — "LE MOMENT SÉRIEUX"
+[ACTIVATION: CONFIANCE_MAYA>=5 & HONNÊTETÉ>=2]
+
+Maya avoue qu’elle plaisante beaucoup parce qu’elle n’aime pas être vulnérable.
+
+CHOIX:
+A. Écouter sans plaisanter
+  CONFIANCE_MAYA +2 ; AFF_MAYA +1
+B. Faire une blague puis revenir au sérieux
+  AFF_MAYA +1
+C. Changer de sujet
+  CONFIANCE_MAYA -1
+
+FIN DE ROUTE CHAPITRE 1:
+Si AFF_MAYA>=7 & CONFIANCE_MAYA>=6 :
+  [FLAG: MAYA_ROUTE_ACTIVE = 1]
+
+============================================================
+5. INÈS — ROUTE "REGARD, SILENCE ET VÉRITÉ"
+============================================================
+
+INES_01 — "LE CLIC"
+[ACTIVATION: INES_PHOTO_1=1]
+
+Inès montre une photo du joueur prise par accident.
+Elle demande si elle peut la conserver.
+
+CHOIX:
+A. Oui
+  SEcurite_INES +1
+B. Seulement si elle me l’envoie
+  AFF_INES +1
+C. Non, efface-la s’il te plaît
+  RESPECT global +1
+  Inès accepte immédiatement
+
+INES_02 — "PARLER PAR IMAGES"
+[ACTIVATION: AFF_INES>=2 & TIME=APRÈS-MIDI]
+
+Inès propose une promenade photo.
+Elle donne au joueur une consigne :
+"Photographie quelque chose que les autres ne remarquent pas."
+
+Résultats:
+A. Une petite scène humaine
+  AFF_INES +2
+B. Une architecture
+  RESPECT_INES +1
+C. Un détail drôle
+  TENSION_INES +1 ; AFF_INES +1
+
+INES_03 — "MALENTENDU"
+[ACTIVATION: AFF_INES>=3 & RUMEUR_1=1]
+
+Inès croit que PLAYER flirte avec tout le monde.
+Elle ne fait pas de scène ; elle devient simplement plus distante.
+
+CHOIX:
+A. Clarifier calmement
+  HONNÊTETÉ +1 ; AFF_INES +1
+B. Minimiser
+  SEcurite_INES -2
+C. Dire qu’elle a mal compris et partir
+  AFF_INES -1
+
+DÉVERROU:
+Si A :
+  [DÉVERROU: INES_CONFESSION_PUDIQUE]
+
+INES_04 — "PLUIE"
+[ACTIVATION: AFF_INES>=4 & TIME=SOIR]
+
+Une pluie soudaine force le duo à s’abriter sous un auvent.
+Ils rient d’être trempés.
+Inès prête sa veste.
+
+CHOIX:
+A. Refuser poliment
+  RESPECT_INES +1
+B. Accepter
+  AFF_INES +1
+C. "Tu fais souvent ça avec les gens que tu apprécies ?"
+  TENSION_INES +2
+
+SCÈNE SPICY :
+Si TENSION_INES>=5 :
+  silence prolongé, regards, possibilité de se rapprocher.
+  [CHOIX FINAL: rester proche / créer de la distance]
+Aucun refus ne retire les gains précédents.
+
+INES_05 — "LA VÉRITÉ EN PHOTO"
+[ACTIVATION: AFF_INES>=5 & SEcurite_INES>=4]
+
+Inès montre une série de photos inédites.
+Chaque photo correspond à une chose qu’elle ne dit pas facilement.
+
+Le joueur doit répondre sans chercher à "réparer" ses émotions.
+
+Réussite si :
+  EMPATHIE/équivalent >=2
+OU
+  HONNÊTETÉ>=4
+
+EFFET :
+  AFF_INES +2
+  SEcurite_INES +2
+  [FLAG: INES_CONFORT = 1]
+
+INES_06 — "NE PAS JOUER"
+[ACTIVATION: INES_CONFORT=1 & AUDACE>=3]
+
+Inès demande au joueur :
+"Tu essaies de me séduire, ou tu apprécies simplement être avec moi ?"
+
+CHOIX:
+A. "Les deux."
+  TENSION_INES +2
+B. "Je ne suis pas sûr."
+  HONNÊTETÉ +1 ; AFF_INES +1
+C. "Je veux juste voir où ça mène."
+  TENSION_INES +1 ; AFF_INES +1
+
+FIN DE ROUTE CHAPITRE 1:
+Si AFF_INES>=7 & SEcurite_INES>=6 :
+  [FLAG: INES_ROUTE_ACTIVE = 1]
+
+============================================================
+6. PREMIÈRES SITUATIONS CROISÉES
+============================================================
+
+CROSS_01 — "LES TROIS EN MÊME TEMPS"
+[ACTIVATION: DAY>=2 & AFF_LENA>=2 & AFF_MAYA>=2 & AFF_INES>=2]
+
+Le joueur entre dans le même lieu où les trois héroïnes sont présentes.
+L’ambiance devient immédiatement particulière.
+
+Règle de sélection :
+- Si une relation est supérieure d’au moins 3 points : cette héroïne domine la scène.
+- Sinon : scène équilibrée.
+- Si TRIANGLE=1 : dialogues de rivalité légère disponibles.
+
+CHOIX:
+A. Se concentrer sur une seule personne
+  AFF cible +1 ; jalousie éventuelle +1
+B. Répartir l’attention
+  REPUTATION +1 ; risque RIVALITE=1
+C. Quitter élégamment la scène
+  RESPECT global +1
+
+CROSS_02 — "L’AIDE QUI ARRIVE AU MAUVAIS MOMENT"
+[ACTIVATION: REPUTATION>=1 & DAY>=2]
+
+Une héroïne appelle le joueur pour l’aider.
+Au même moment, une autre lui écrit.
+
+Possibilités :
+- aider la première immédiatement
+- prévenir qu’on est occupé
+- tenter d’aider les deux et créer du CHAOS
+
+Si CHAOS>=3 :
+  événement spécial : le joueur arrive au mauvais endroit avec le mauvais objet,
+  provoquant une scène très comique.
+  REPUTATION -1 OU +1 selon la réaction.
+
+CROSS_03 — "RUMEUR DE COUPLE"
+[ACTIVATION: AFF_une_héroïne>=5 & REPUTATION>=1]
+
+Un commerçant félicite le joueur "pour son couple" devant une autre héroïne.
+
+CHOIX:
+A. Corriger immédiatement
+  HONNÊTETÉ +1
+B. Sourire sans confirmer
+  AUDACE +1
+C. Faire une plaisanterie
+  CHAOS +1
+
+Si B :
+  [RUMEUR_1 = COUPLE]
+  DÉVERROU: confrontation douce possible.
+
+============================================================
+7. CHAÎNES DE MALENTENDUS
+============================================================
+
+RUMEUR_A — "IL/ELLE SÉDUIT TOUT LE MONDE"
+[ACTIVATION: AFF>=3 avec deux héroïnes & AUDACE>=2]
+
+Une plaisanterie du joueur est rapportée hors contexte.
+Effets :
+  une héroïne demande des explications
+  une autre devient plus joueuse
+
+RÉSOLUTION:
+1. Vérité directe :
+   HONNÊTETÉ +2 ; RUMEUR effacée
+2. Humour assumé :
+   si CHARME/HUMOUR suffisant, REPUTATION +1
+3. Dénégation agressive :
+   réputation -1 ; relation la plus méfiante -2
+
+RUMEUR_B — "LE RENDEZ-VOUS CACHÉ"
+[ACTIVATION: deux scènes de type SOIR réussies]
+
+Quelqu’un aperçoit le joueur sortir avec une héroïne.
+La seconde le découvre via un tiers.
+
+BRANCHES:
+- relation principale >=7 : confrontation sérieuse
+- relation secondaire >=5 : jalousie taquine
+- HONNÊTETÉ>=4 : possibilité de désamorcer
+- HONNÊTETÉ<2 : verrouillage temporaire des scènes profondes
+
+============================================================
+8. ÉVÉNEMENTS "SPICY" OPTIONNELS
+============================================================
+
+SPICY_01 — "LE REGARD QUI DURE"
+[ACTIVATION: TENSION_héroïne>=5]
+Durée courte. Pas de dialogue obligatoire.
+CHOIX: soutenir le regard / plaisanter / détourner les yeux.
+Effets : TENSION ±1 ou +2.
+
+SPICY_02 — "TROP PETIT CANAPÉ"
+[ACTIVATION: AFF>=5 & scène en intérieur]
+Deux personnages doivent partager une assise étroite.
+Une remarque sur la proximité déclenche :
+- flirt mutuel
+- recul volontaire
+- changement de sujet
+Aucune option de refus n’a de conséquence négative.
+
+SPICY_03 — "LE PARI"
+[ACTIVATION: AUDACE>=3 & TENSION>=5]
+Une héroïne propose un petit défi : "Si tu gagnes, tu choisis la prochaine sortie."
+Le défi peut être intellectuel, musical ou social.
+Réussite : TENSION +2.
+Échec : TENSION +1 et humiliation légère, jamais dégradante.
+
+SPICY_04 — "PRESQUE"
+[ACTIVATION: TENSION>=7 & AFF>=6]
+Moment suspendu où le baiser semble possible.
+CHOIX:
+A. Attendre et demander
+B. Se rapprocher lentement pour laisser un espace clair de refus
+C. Transformer le moment en plaisanterie
+Résultat :
+- A = TENSION +2
+- B = TENSION +2 si l’autre consent ; sinon TENSION -1 mais RESPECT +2
+- C = TENSION +1
+
+SPICY_05 — "LA PORTE QUI S’OUVRE"
+[ACTIVATION: scène intime non sexuelle]
+Un tiers ouvre une porte au pire moment et imagine une situation complètement fausse.
+Conséquences possibles :
+  CHAOS +2
+  RUMEUR_1
+  réaction amusée
+  réaction embarrassée
+Ne jamais présenter une implication d’infidélité ou de coercition.
+
+============================================================
+9. SYSTÈME DE CONSENTEMENT ET DE TON
+============================================================
+
+Chaque interaction romantique avancée utilise un test binaire :
+CONSENT = CLEAR / UNCLEAR / NO
+
+CLEAR :
+  la scène peut progresser.
+UNCLEAR :
+  la scène ralentit, dialogue de clarification obligatoire.
+NO :
+  l’action s’arrête immédiatement.
+  RESPECT +1 si le joueur respecte la limite.
+
+INTERDIT AU MOTEUR :
+- gain d’affection obtenu par pression après un refus
+- avantage romantique pour intimidation
+- mise en scène d’une incapacité comme opportunité de séduction
+- récompense d’une atteinte à la vie privée
+
+============================================================
+10. ÉTATS DE FIN DU CHAPITRE 1
+============================================================
+
+FIN_A — "UNE PRÉFÉRENCE SE DESSINE"
+Condition :
+  une seule route active
+  AFF cible >=7
+Résultat :
+  une invitation spéciale au chapitre 2.
+
+FIN_B — "DOUBLE ALLEGIANCE ÉMOTIONNELLE"
+Condition :
+  deux héroïnes AFF>=6
+  aucune sous 3
+  TRIANGLE=1
+Résultat :
+  CH2 démarre avec une scène de tension sociale.
+
+FIN_C — "LE CHAOS MAGNIFIQUE"
+Condition :
+  CHAOS>=6
+  REPUTATION>=2
+Résultat :
+  tout le quartier connaît le joueur.
+  Les trois héroïnes le trouvent soit hilarant, soit inquiétant.
+  Déverrouille plus d’événements de groupe.
+
+FIN_D — "LE CŒUR DISCRET"
+Condition :
+  HONNÊTETÉ>=5
+  au moins une héroïne AFF>=6
+  aucune RUMEUR active
+Résultat :
+  dialogues plus intimes au chapitre 2.
+
+FIN_E — "MAUVAISE IMPRESSION"
+Condition :
+  REPUTATION<=-2
+OU
+  deux héroïnes avec relation <=1
+Résultat :
+  chapitre 2 plus difficile, mais possibilité de rédemption.
+
+============================================================
+11. TABLE DES DÉVERROUILLAGES — CHAPITRE 1
+============================================================
+
+ID / CONDITION / RÉSULTAT
+
+LENA_QUIET_MOMENT
+  AFF_LENA>=3 & LENA_VULNERABLE=1
+  -> scène calme au café
+
+LENA_SOIR_PRIVATE
+  LENA_05 réussi
+  -> discussion privée
+
+CH1_LENA_ALMOST_KISS
+  LENA_ROUTE_ACTIVE=1
+  -> fin de chapitre spécialisée
+
+MAYA_BAISER_OPTIONNEL
+  TENSION_MAYA>=6 & MAYA_04 terminé positivement
+  -> scène "presque"
+
+INES_CONFESSION_PUDIQUE
+  INES_03 résolu avec honnêteté
+  -> aveu émotionnel partiel
+
+CROSS_TRIANGLE
+  AFF_LENA>=4 & AFF_MAYA>=4 & AFF_INES>=4
+  -> scènes croisées fréquentes
+
+RIVALITE_LIGHT
+  au moins deux héroïnes TENSION>=5
+  -> répliques compétitives
+
+REPUTATION_GOOD
+  REPUTATION>=2
+  -> NPC plus chaleureux
+
+REPUTATION_BAD
+  REPUTATION<=-2
+  -> certains dialogues deviennent défensifs
+
+============================================================
+12. MATRICE RAPIDE DES CHOIX
+============================================================
+
+ACTION                       LÉNA       MAYA       INÈS       GLOBAL
+Écouter sincèrement          +AFF       +CONF      +AFF       +HONNÊTETÉ
+Flirter directement          +TENSION   +TENSION   +TENSION   +AUDACE
+Faire une blague              +TENSION   +AFF       +/-        +CHAOS
+Respecter une limite          +RESPECT   +CONF      +SECURITÉ  +REPUTATION
+Fouiller/espionner            -RESPECT   -CONF      -SECURITÉ  -REPUTATION
+Promettre puis tenir          +RESPECT   +CONF      +SECURITÉ  +REPUTATION
+Mentir pour éviter un conflit -RESPECT   -CONF      -SECURITÉ  +RUMEUR
+Répondre à une jalousie par
+une clarification             +AFF       +CONF      +AFF       +HONNÊTETÉ
+
+============================================================
+13. EXEMPLES DE CONDITIONS COMPOSÉES
+============================================================
+
+EXEMPLE A
+[ACTIVATION:
+ DAY>=2
+ AND TIME=SOIR
+ AND AFF_LENA>=5
+ AND RESPECT_LENA>=3
+ AND RUMEUR_1=0
+]
+
+EXEMPLE B
+[ACTIVATION:
+ DAY>=3
+ AND (AFF_MAYA>=5 OR AFF_INES>=5)
+ AND CHAOS>=2
+ AND REPUTATION>=0
+]
+
+EXEMPLE C
+[ACTIVATION:
+ DAY>=3
+ AND AFF_LENA>=4
+ AND AFF_MAYA>=4
+ AND AFF_INES>=4
+ AND TRIANGLE=1
+]
+-> scène de groupe obligatoire.
+
+EXEMPLE D
+[VERROU:
+ TENSION_INES>=7
+ AND CONSENT_INES=NO
+]
+-> empêcher toute progression romantique immédiate ;
+   proposer dialogue neutre ou sortie de scène.
+
+============================================================
+14. CHECKLIST D’IMPLÉMENTATION
+============================================================
+
+Avant chaque scène :
+[ ] Vérifier DAY
+[ ] Vérifier TIME
+[ ] Vérifier AFF de l’héroïne
+[ ] Vérifier variable de confiance/respect
+[ ] Vérifier RUMEUR active
+[ ] Vérifier scène déjà jouée
+[ ] Vérifier disponibilité d’une route rivale
+[ ] Appliquer les gains/pertes
+[ ] Écrire les flags persistants
+[ ] Recalculer TRIANGLE / COEUR_CIBLE
+
+À la fin du chapitre :
+[ ] Déterminer route active éventuelle
+[ ] Calculer réputation
+[ ] Conserver les promesses non résolues
+[ ] Conserver les rumeurs non résolues
+[ ] Conserver les niveaux de tension
+[ ] Générer les invitations du chapitre 2
+[ ] Déterminer la première scène du chapitre 2
+
+============================================================
+15. RÉSUMÉ NARRATIF DU CHAPITRE
+============================================================
+
+Le chapitre 1 doit donner l’impression que le joueur arrive dans un endroit où chacun
+observe les autres. LÉNA teste la solidité du joueur par les mots. MAYA teste sa capacité
+à suivre son énergie sans se perdre dans le chaos. INÈS teste sa capacité à être sincère
+sans jouer un rôle.
+
+Le joueur peut privilégier une héroïne, entretenir plusieurs liens, ou provoquer malgré lui
+une micro-rivalité. Les situations "spicy" ne servent pas seulement à récompenser un score
+de drague : elles révèlent la personnalité de chaque héroïne et modifient les relations.
+
+Le point important du chapitre 1 est la création d’un historique. Aucun flirt n’est isolé :
+un regard tenu peut influencer une scène trois jours plus tard ; une promesse oubliée peut
+faire naître une rumeur ; une limite respectée peut rendre un personnage plus confiant ;
+une plaisanterie réussie peut transformer un simple incident en complicité durable.
+
+FIN DU CHAPITRE 1
+
+============================================================
+ANNEXE A — CHARACTER BIBLE COMPLET
+============================================================
+
+PRINCIPE DE DESCRIPTION
+Les descriptions ci-dessous servent au character design, à l’écriture des dialogues,
+aux animations et à la continuité visuelle. Les trois héroïnes sont des adultes de
+plus de 18 ans. Les détails physiques sont descriptifs et non pornographiques.
+
+============================================================
+A.1 — LÉNA VERNET
+============================================================
+
+IDENTITÉ
+Nom complet : Léna Vernet
+Âge : 24 ans
+Taille : 1,68 m environ
+Silhouette : élancée, tonique, proportions naturelles
+Métier : employée et co-gérante opérationnelle du café-librairie Le Signet
+Rôle narratif : joute verbale / slow burn / respect mutuel
+
+APPARENCE GÉNÉRALE
+Léna donne immédiatement une impression de netteté et de maîtrise. Son apparence est
+soignée sans sembler calculée. Elle se tient droit, marche vite, et donne l'impression
+d’avoir toujours trois choses à faire avant la fin de la journée.
+
+VISAGE
+- Visage ovale légèrement allongé.
+- Mâchoire fine mais structurée.
+- Pommettes visibles, surtout lorsqu’elle sourit ou tourne la tête.
+- Nez droit et relativement fin.
+- Sourcils épais, bien dessinés naturellement, souvent légèrement froncés quand elle
+  réfléchit.
+- Yeux noisette tirant vers le brun doré sous une lumière chaude.
+- Regard direct, très stable, utilisé comme outil de dialogue autant que ses paroles.
+- Cils naturellement fournis, sans effet spectaculaire.
+- Bouche expressive, lèvre supérieure légèrement plus fine que la lèvre inférieure.
+- Sourire asymétrique : quand une remarque l’amuse vraiment, un seul coin de la bouche
+  remonte d’abord.
+- Petit pli d’expression près des yeux lorsqu’elle rit franchement.
+
+PEAU ET CHEVEUX
+- Teint clair à beige chaud, avec de légères variations rosées selon l’effort ou la
+  température.
+- Quelques petits grains de beauté discrets sur le haut du visage et le cou.
+- Cheveux châtain foncé, épais, légèrement ondulés.
+- Longueur : autour des omoplates.
+- Frange inexistante ; mèches avant assez longues pour encadrer les joues.
+- Elle les porte souvent attachés bas lorsqu’elle travaille.
+- Quand elle est détendue, elle laisse ses cheveux libres et leur texture ondulée
+  devient plus visible.
+- Une mèche a tendance à retomber devant son œil gauche lorsqu’elle se penche.
+
+CORPS ET POSTURE
+- Épaules légèrement athlétiques grâce au travail quotidien et au déplacement de cartons.
+- Taille marquée sans exagération.
+- Jambes toniques ; posture équilibrée.
+- Mains fines, doigts longs, souvent tachés d’encre ou de poussière de carton.
+- Ongles courts et pratiques.
+- Elle croise souvent les bras quand elle évalue une personne.
+- Lorsqu’elle fait confiance, elle se détend : épaules plus basses, posture moins défensive.
+- Quand elle ment, elle a tendance à tapoter le bord d’un objet avec deux doigts.
+
+SIGNES DISTINCTIFS
+- Petite cicatrice presque invisible près du coude droit.
+- Montre-bracelet sobre à cadran rectangulaire.
+- Deux bagues fines qu’elle porte presque toujours, héritage familial sans valeur
+  spectaculaire.
+- Odeur générale associée : café, papier, savon propre et parfum très léger aux notes
+  boisées.
+
+VOIX
+- Voix médium, claire, légèrement grave lorsqu’elle est fatiguée.
+- Débit rapide dans les discussions intellectuelles.
+- Ralentit nettement lorsqu’elle parle d’un sujet personnel.
+- Quand elle est vraiment amusée, elle rit avant de terminer sa phrase.
+
+GARDE-ROBE
+TRAVAIL :
+- Pantalon droit ou jean sombre.
+- Chemise, pull fin ou t-shirt uni.
+- Tabliers simples du café.
+- Chaussures pratiques.
+SOIR :
+- Veste courte ou manteau long selon la saison.
+- Tenue plus structurée, couleurs neutres.
+- Bijoux minimalistes.
+DÉTENTE :
+- Gros pull, pantalon confortable, cheveux détachés.
+ÉVÉNEMENT :
+- Robe ou combinaison sobre avec coupe nette, sans surcharge d’accessoires.
+
+EXPRESSIONS À ANIMER
+1. Sourire en coin = amusement contrôlé.
+2. Sourcils levés = défi.
+3. Regard fixe de deux secondes supplémentaires = intérêt.
+4. Petit détour des yeux = gêne rare.
+5. Lèvres pincées = elle évite de répondre trop vite.
+6. Rire franc tête légèrement inclinée en arrière = confiance très élevée.
+
+GESTES RÉCURRENTS
+- Redresse une pile de livres même lorsqu’elle n’en a pas besoin.
+- Tapote deux fois un comptoir avant de répondre à une question.
+- Se passe une main dans les cheveux lorsqu’elle est surprise.
+- Prend une tasse dans ses deux mains lorsqu’une conversation devient intime.
+
+SILHOUETTE EN SILHOUETTAGE
+La reconnaître par :
+- cheveux épais jusqu’aux omoplates,
+- veste nette,
+- posture droite,
+- mouvements économes,
+- silhouette élancée.
+
+PROGRESSION VISUELLE AVEC LA ROMANCE
+AFF 0–2 : posture professionnelle, regard évaluateur.
+AFF 3–5 : sourires plus fréquents, espace personnel réduit naturellement.
+AFF 6–8 : contact visuel prolongé, gestes plus détendus.
+AFF 9+ : apparence encore naturelle mais davantage de préparation avant les rendez-vous.
+
+============================================================
+A.2 — MAYA RIVIÈRE
+============================================================
+
+IDENTITÉ
+Nom complet : Maya Rivière
+Âge : 26 ans
+Taille : 1,72 m environ
+Silhouette : athlétique souple, dynamique
+Métier : musicienne amateur / organisatrice d’événements / missions freelance
+Rôle narratif : complicité / énergie / chaos affectueux
+
+APPARENCE GÉNÉRALE
+Maya prend davantage de place par son énergie que par son gabarit. Elle gesticule,
+se retourne souvent en parlant et paraît toujours en mouvement. Son allure mélange
+confort, improvisation et touches personnelles.
+
+VISAGE
+- Visage plutôt en cœur, avec pommettes douces.
+- Mâchoire peu anguleuse.
+- Nez légèrement retroussé à l’extrémité.
+- Sourcils expressifs qui bougent beaucoup pendant qu’elle parle.
+- Yeux verts noisette, avec une variation de teinte selon l’éclairage.
+- Regard très mobile : elle regarde les gens, les objets et l’environnement presque
+  simultanément.
+- Bouche large avec sourire très visible.
+- Dents légèrement irrégulières de façon naturelle, ce qui renforce son sourire.
+- Elle plisse légèrement le nez quand elle rit.
+
+PEAU ET CHEVEUX
+- Teint medium avec sous-ton doré.
+- Quelques taches de rousseur visibles sur le nez et les pommettes en été.
+- Cheveux brun moyen avec reflets cuivrés.
+- Texture souple, naturellement volumineuse.
+- Longueur sous les épaules.
+- Elle utilise souvent un élastique coloré et improvise des queues-de-cheval hautes.
+- Deux petites mèches autour du visage restent rarement disciplinées.
+- Quand elle sort le soir, elle peut ajouter des barrettes ou accessoires brillants.
+
+CORPS ET POSTURE
+- Épaules solides, bras légèrement musclés par la guitare et le transport de matériel.
+- Taille peu marquée, silhouette sportive et fonctionnelle.
+- Jambes toniques.
+- Démarche rapide, souvent légèrement penchée vers l’avant.
+- Gestuelle expansive.
+- Elle touche fréquemment son propre bras ou sa nuque lorsqu’elle réfléchit.
+- Quand elle est nerveuse, elle bouge encore plus.
+- Lorsqu’elle est touchée émotionnellement, son agitation disparaît presque complètement.
+
+SIGNES DISTINCTIFS
+- Petit bracelet textile avec plusieurs nœuds.
+- Deux petites boucles d’oreilles différentes qu’elle refuse de dépareiller.
+- Micro-cicatrice sur le pouce gauche due à une corde de guitare.
+- Ongles souvent courts avec vernis écaillé ou couleur différente selon les doigts.
+- Odeur associée : shampoing fruité, lessive propre, parfois fumée de concert.
+
+VOIX
+- Voix claire et expressive.
+- Rire sonore.
+- Elle parle rapidement lorsqu’elle raconte une anecdote.
+- Volume assez élevé en groupe mais plus bas lorsqu’elle devient sincère.
+- Peut imiter des voix ou accents pour faire rire.
+
+GARDE-ROBE
+QUOTIDIEN :
+- Jeans, pantalon cargo, t-shirt graphique.
+- Sneakers.
+- Surchemises larges.
+MUSIQUE :
+- Tenues mobiles et confortables.
+- Bracelets, accessoires colorés.
+SOIRÉE :
+- Haut plus travaillé, veste courte, pantalon ou jupe confortable.
+- Boucles d’oreilles plus visibles.
+JOUR CALME :
+- Hoodie, cheveux attachés, chaussettes dépareillées.
+ÉVÉNEMENT :
+- Pièce forte unique, puis accessoires assez nombreux.
+
+EXPRESSIONS À ANIMER
+1. Grand sourire immédiat = enthousiasme.
+2. Yeux plissés + sourire = moquerie affectueuse.
+3. Bouche entrouverte + silence bref = vraie surprise.
+4. Regard latéral accompagné d’un sourire = flirt.
+5. Épaules remontées = gêne.
+6. Expression totalement calme après une blague = elle prépare une réplique.
+
+GESTES RÉCURRENTS
+- Tape doucement dans l’épaule des gens avec qui elle est à l’aise.
+- Fait tourner un médiator entre ses doigts.
+- Se balance sur ses talons quand elle attend.
+- Fait des signes à des inconnus qu’elle connaît à peine.
+- Attrape le bras d’un ami pour l’entraîner quelque part.
+
+SILHOUETTE EN SILHOUETTAGE
+La reconnaître par :
+- cheveux volumineux,
+- posture en mouvement,
+- accessoires visibles,
+- silhouette sportive,
+- gestuelle ample.
+
+PROGRESSION VISUELLE AVEC LA ROMANCE
+AFF 0–2 : enthousiasme social identique avec presque tout le monde.
+AFF 3–5 : cherche plus souvent le joueur du regard.
+AFF 6–8 : enthousiasme plus ciblé, apparence choisie pour certaines sorties.
+AFF 9+ : moments où elle ralentit volontairement son énergie pour laisser place à l’intimité.
+
+============================================================
+A.3 — INÈS DELCOURT
+============================================================
+
+IDENTITÉ
+Nom complet : Inès Delcourt
+Âge : 25 ans
+Taille : 1,65 m environ
+Silhouette : fine, souple, légèrement anguleuse
+Métier : photographe indépendante
+Rôle narratif : slow burn / observation / confiance
+
+APPARENCE GÉNÉRALE
+Inès donne une impression de discrétion. Elle n’essaie pas de disparaître, mais ne cherche
+jamais à occuper le centre d’une pièce. Son apparence est sobre et sa présence devient
+plus forte avec la durée d’une interaction.
+
+VISAGE
+- Visage ovale avec menton légèrement pointu.
+- Pommettes fines.
+- Nez droit, légèrement plus large à la base.
+- Sourcils naturels, assez droits.
+- Yeux brun foncé, presque noirs dans certaines lumières.
+- Regard concentré ; elle fixe parfois un détail plutôt qu’une personne lorsqu’elle réfléchit.
+- Cils longs mais discrets.
+- Bouche moyenne, expression souvent neutre au repos.
+- Son sourire change beaucoup son visage : il est rare, bref, puis sincère.
+
+PEAU ET CHEVEUX
+- Teint beige clair avec sous-ton neutre.
+- Quelques marques minuscules de soleil sur le nez.
+- Cheveux noirs ou brun-noir, raides avec une légère courbure aux pointes.
+- Longueur jusqu’au milieu du dos.
+- Elle les porte souvent lâchés.
+- Lorsqu’elle travaille, elle les attache bas ou utilise une pince.
+- Elle n’aime pas les coiffures trop rigides.
+
+CORPS ET POSTURE
+- Épaules fines.
+- Posture légèrement relâchée, surtout lorsqu’elle tient un appareil photo.
+- Mouvements précis, peu nombreux.
+- Bras et jambes fins mais suffisamment toniques pour de longues journées de marche.
+- Mains fines et agiles, doigts habitués aux réglages d’appareil.
+- Elle croise rarement les bras ; préfère tenir son appareil, une lanière ou une tasse.
+- Lorsqu’elle est émue, elle baisse légèrement le menton plutôt que de détourner complètement
+  le regard.
+
+SIGNES DISTINCTIFS
+- Fine cicatrice ancienne sur l’index droit.
+- Petit pendentif géométrique.
+- Sac photo usé mais impeccablement entretenu.
+- Élastique noir autour du poignet.
+- Ongles naturels, très courts.
+- Odeur associée : thé noir, papier photo, lessive et parfum musqué très discret.
+
+VOIX
+- Voix basse à moyenne, posée.
+- Elle n’élève presque jamais la voix.
+- Phrases courtes lorsque la situation est sociale.
+- Devient plus bavarde lorsqu’un sujet artistique la passionne.
+- Les silences avec elle ne signifient pas forcément malaise.
+
+GARDE-ROBE
+TRAVAIL :
+- Pantalon sombre, t-shirt uni, veste légère.
+- Chaussures adaptées à la marche.
+- Sac photo en bandoulière.
+RENDEZ-VOUS :
+- Pantalon taille haute ou robe simple.
+- Veste légère.
+- Peu de bijoux.
+PLUIE :
+- Imperméable sobre, cheveux attachés.
+JOUR DÉTENTE :
+- Pull oversize, pantalon confortable.
+ÉVÉNEMENT :
+- Tenue monochrome, coupe élégante et minimaliste.
+
+EXPRESSIONS À ANIMER
+1. Sourcil très légèrement relevé = curiosité.
+2. Micro-sourire = approbation.
+3. Regard stable puis baisse rapide des yeux = gêne.
+4. Bouche entrouverte sans parole = surprise.
+5. Sourire qui apparaît progressivement = confiance.
+6. Silence prolongé + regard direct = moment émotionnel important.
+
+GESTES RÉCURRENTS
+- Ajuste la lanière de son appareil.
+- Observe les mains des gens quand elle écoute.
+- Incline légèrement la tête pour comprendre.
+- Touche brièvement son pendentif en situation de stress.
+- Range systématiquement son environnement avant de partir.
+
+SILHOUETTE EN SILHOUETTAGE
+La reconnaître par :
+- silhouette fine,
+- cheveux longs foncés,
+- sac photo,
+- mouvements mesurés,
+- posture calme.
+
+PROGRESSION VISUELLE AVEC LA ROMANCE
+AFF 0–2 : distance sociale nette.
+AFF 3–5 : davantage de face-à-face et de regards.
+AFF 6–8 : sourire plus fréquent, gestes plus ouverts.
+AFF 9+ : elle choisit des vêtements ou lieux qui montrent davantage son univers personnel.
+
+============================================================
+A.4 — PLAYER / PERSONNAGE-JOUEUR
+============================================================
+
+Le joueur doit rester personnalisable.
+
+ATTRIBUTS VISUELS RECOMMANDÉS
+- Taille : libre.
+- Morphologie : libre.
+- Teint : libre.
+- Cheveux : libre.
+- Yeux : libre.
+- Présentation de genre : libre.
+- Style vestimentaire : libre.
+
+TRAITS NON VISUELS
+CHARME :
+  capacité à produire une impression agréable.
+ASSURANCE :
+  stabilité dans les échanges.
+HUMOUR :
+  efficacité des réponses comiques.
+EMPATHIE :
+  capacité à reconnaître l’état émotionnel d’autrui.
+AUDACE :
+  propension à tenter une approche romantique.
+DISCRÉTION :
+  capacité à éviter les complications sociales.
+
+GESTURE SET
+- sourire,
+- regard,
+- haussement d’épaules,
+- hésitation,
+- recul respectueux,
+- rapprochement prudent,
+- mains visibles,
+- gestes spécifiques selon personnalisation.
+
+============================================================
+A.5 — PNJ : SAMIR BENALI
+============================================================
+
+Âge : 29 ans
+Métier : propriétaire du café-librairie Le Signet
+Rôle : mentor social involontaire / source d’humour
+
+Physique :
+- 1,80 m environ.
+- Carrure moyenne.
+- Cheveux noirs courts.
+- Barbe courte soigneusement entretenue.
+- Yeux bruns.
+- Lunettes rectangulaires portées seulement pour la comptabilité.
+- Chemises retroussées aux avant-bras.
+- Montre analogique ancienne.
+- Geste typique : fait tourner un stylo lorsqu’il écoute.
+
+Personnalité :
+- observateur,
+- chaleureux,
+- adore provoquer gentiment Léna,
+- prétend ne rien remarquer des histoires romantiques alors qu’il remarque tout.
+
+Fonction :
+Peut introduire LENA_05 ou détourner une conversation gênante.
+
+============================================================
+A.6 — PNJ : TOM ROUX
+============================================================
+
+Âge : 27 ans
+Métier : technicien son / ami de Maya
+Rôle : catalyseur du chaos
+
+Physique :
+- 1,76 m environ.
+- Silhouette mince.
+- Cheveux bouclés très courts.
+- Barbe irrégulière.
+- Tee-shirts de groupes.
+- Multiples bracelets textiles.
+- Petit tatouage abstrait au poignet.
+
+Personnalité :
+- parle vite,
+- perd régulièrement ses clés,
+- adore organiser des plans de dernière minute,
+- comprend très mal les sous-entendus romantiques.
+
+Fonction :
+Responsable de plusieurs événements comiques et du KARAOKÉ D’URGENCE.
+
+============================================================
+A.7 — PNJ : CHLOÉ MARTIN
+============================================================
+
+Âge : 23 ans
+Métier : étudiante en architecture / habituée du quartier
+Rôle : source de rumeurs involontaires
+
+Physique :
+- taille moyenne,
+- cheveux châtain clair attachés rapidement,
+- lunettes rondes,
+- sac à dos très chargé,
+- baskets,
+- nombreuses petites taches de peinture sur les vêtements.
+
+Personnalité :
+- parle sans filtre,
+- ne cherche jamais à nuire,
+- comprend parfois une situation romantique plusieurs secondes après tout le monde.
+
+Fonction :
+Peut déclencher RUMEUR_A ou RUMEUR_B sans intention malveillante.
+
+============================================================
+A.8 — PNJ : LÉONARD "LÉO" FABRE
+============================================================
+
+Âge : 31 ans
+Métier : organisateur du marché et événements de quartier
+Rôle : facilitateur de scènes de groupe
+
+Physique :
+- grand,
+- silhouette robuste,
+- cheveux blond foncé très courts,
+- barbe de quelques jours,
+- voix forte,
+- veste de travail et chaussures pratiques.
+
+Personnalité :
+- optimiste,
+- très fiable,
+- adore faire travailler les gens ensemble,
+- attribue les responsabilités sans demander assez d’informations.
+
+Fonction :
+Déclenche CROSS_01, CROSS_02 et certaines missions collectives.
+
+============================================================
+A.9 — PNJ : ELISE
+============================================================
+
+Âge : 22 ans
+Métier : chanteuse amateur / amie de Maya
+Rôle : personnage secondaire social
+
+Physique :
+- petite,
+- cheveux roux courts,
+- yeux gris,
+- vestes colorées,
+- boucles d’oreilles épaisses.
+
+Personnalité :
+- extravertie,
+- compétitive en musique,
+- aime taquiner Maya lorsqu’elle remarque un rapprochement amoureux.
+
+Fonction :
+Peut verbaliser une tension que Maya n’ose pas nommer.
+
+============================================================
+A.10 — CONTINUITÉ PHYSIQUE ET ANIMATION
+============================================================
+
+RÈGLE 1 — LES SILHOUETTES DOIVENT ÊTRE IMMÉDIATEMENT DISTINCTES
+Léna = ligne élancée + cheveux châtains ondulés + posture droite.
+Maya = silhouette sportive + cheveux volumineux + accessoires + gestuelle large.
+Inès = silhouette fine + cheveux foncés longs + sac photo + gestuelle mesurée.
+
+RÈGLE 2 — LES ÉMOTIONS MODIFIENT LA POSTURE AVANT LE VISAGE
+Léna : baisse des épaules = confiance.
+Maya : diminution de la gestuelle = vulnérabilité.
+Inès : posture plus ouverte = confiance.
+
+RÈGLE 3 — NE PAS CHANGER ARBITRAIREMENT LES DÉTAILS
+Conserver :
+- longueur de cheveux,
+- accessoires signatures,
+- cicatrices/grains de beauté,
+- style de chaussures,
+- couleur générale des cheveux,
+- objet professionnel de chaque personnage.
+
+RÈGLE 4 — ÉVOLUTION ROMANTIQUE SUBTILE
+Les personnages ne changent pas physiquement pour "récompenser" le joueur.
+Le changement doit provenir du contexte :
+- coiffure choisie pour une sortie,
+- tenue plus personnelle,
+- posture plus détendue,
+- regard plus prolongé,
+- proximité physique davantage assumée.
+
+============================================================
+FIN — CHARACTER BIBLE
+============================================================
